@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<kmodule xmlns="http://jboss.org/kie/6.0.0/kmodule">
+    <kbase name="Todas" packages="rules.Alimentacion">
+        <ksession name="rRest" type="stateless"/>
+    </kbase>
+    <kbase name="ReglasSitio" packages="rules.sitios">
+        <ksession name="sitio" type="stateless"/>
+    </kbase>
+</kmodule>

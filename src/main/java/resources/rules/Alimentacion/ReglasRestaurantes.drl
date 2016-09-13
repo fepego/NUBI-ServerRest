@@ -1,0 +1,59 @@
+package rules;
+dialect  "mvel"
+import com.nubi.controlador.Candidato
+import com.nubi.colecciones.*
+
+//Conjunto Reglas de distancia
+rule "Regla por distancia más corta exacta"
+    when
+        c: Candidato(distancia <= usuario.preferencias.distancia)
+    then
+        c.setPuntaje(c.getPuntaje()+1);
+        System.out.println("se agregó un punto por distancia "+c.getRestaurante().getNombre());
+end
+rule "Regla por distancia más corta con tolerancia"
+    when
+        c: Candidato(distancia > usuario.preferencias.distancia && distancia <= usuario.preferencias.distancia + usuario.preferencias.toleranciaDist )
+    then
+        c.setPuntaje(c.getPuntaje()+0.5);
+        System.out.println("se agregó 0.5 por distancia + tolerancia");
+end
+//Conjunto reglas de Disponibilidad
+rule "Regla por Disponibilidad en estado baja"
+    when
+        c: Candidato(restaurante.estado.disponibilidad < 0.5 && usuario.preferencias.disponibilidad=="Libre" ||
+        usuario.preferencias.disponibilidad=="Media" || usuario.preferencias.disponibilidad=="Cualquiera" )
+    then
+        c.setPuntaje(c.getPuntaje()+1);
+        System.out.println("se agregó 1 por disponibilidad");
+end
+rule "Regla por Disponibilidad en estado medio y usuario con preferencia a libre"
+    when
+        c: Candidato(restaurante.estado.disponibilidad == 0.5 && usuario.preferencias.disponibilidad=="Libre")
+    then
+        c.setPuntaje(c.getPuntaje()+0.5);
+        System.out.println("se agregó 0.5 por disponibilidad ");
+end
+rule "Regla por Disponibilidad en estado medio y usuario con preferencia a Media/Cualquiera"
+    when
+        c: Candidato(restaurante.estado.disponibilidad == 0.5 && usuario.preferencias.disponibilidad=="Media" ||
+        usuario.preferencias.disponibilidad=="Cualquiera")
+    then
+        c.setPuntaje(c.getPuntaje()+1);
+        System.out.println("se agregó 1 por disponibilidad");
+end
+rule "Regla por Disponibilidad en estado LLeno y usuario con preferencia a Media"
+    when
+        c: Candidato(restaurante.estado.disponibilidad > 0.5 && usuario.preferencias.disponibilidad=="Media" )
+    then
+        c.setPuntaje(c.getPuntaje()+0.5);
+        System.out.println("se agregó 0.5 por disponibilidad");
+end
+rule "Regla por Disponibilidad en estado LLeno y usuario con preferencia a Cualquiera"
+    when
+        c: Candidato(restaurante.estado.disponibilidad > 0.5 && usuario.preferencias.disponibilidad=="Cualquiera" )
+    then
+        c.setPuntaje(c.getPuntaje()+1);
+        System.out.println("se agregó 1 por disponibilidad");
+end
+
