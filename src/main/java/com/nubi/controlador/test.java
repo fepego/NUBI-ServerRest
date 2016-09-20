@@ -1,17 +1,24 @@
 package com.nubi.controlador;
 
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.nubi.Utils.Calculador;
 import com.nubi.colecciones.Restaurante;
+import com.nubi.colecciones.Semilla;
 import com.nubi.colecciones.SitiosEstudio;
 import com.nubi.colecciones.Usuario;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.StatelessKieSession;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.aggregation.AggregationPipeline;
+import org.mongodb.morphia.aggregation.Projection;
 import org.mongodb.morphia.query.Query;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -24,7 +31,7 @@ public class test {
     private static List <SitiosEstudio> sts;
     private static MongoClient cli= new MongoClient("localhost",27017);
     private static Morphia mph= new Morphia();
-    private static Datastore ds= mph.createDatastore(cli,"NUBI_DB");
+    private static Datastore ds= mph.createDatastore(cli,"NUBI");
     private static List<Candidato> candidatos;
     public static void main(String[] args) {
         try {
@@ -40,9 +47,7 @@ public class test {
 //            EjecutarReglasSitioEstudio(kContainer);
 //            buscarRestaurantes();
 //            EjecutarReglasRestaurante(kContainer);
-
-           Retroalimentación.recalcularDisponibilidad();
-            System.out.println("si funciona");
+              probabilidadAlertas();
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -116,5 +121,40 @@ public class test {
     {
         Query<SitiosEstudio> qry= ds.createQuery(SitiosEstudio.class);
         sts= ds.find(qry.getEntityClass()).asList();
+    }
+    public static void actualizar()
+    {
+        Date fecha= new Date();
+        Query<SitiosEstudio> qry= ds.createQuery(SitiosEstudio.class);
+        sts= ds.find(qry.getEntityClass()).asList();
+        sts.get(0).setSemilla(new ArrayList<Semilla>());
+        sts.get(0).getSemilla().add(new Semilla());
+        sts.get(0).getSemilla().get(0).setHoraInicio(fecha);
+        ds.save(sts);
+
+    }
+    public static void probabilidadAlertas()
+    {
+        if(!Calculador.semanaCorte())
+        {
+           /* AggregationPipeline qry= ds.createAggregation(SitiosEstudio.class);
+            qry.unwind("semilla");
+            qry.match(ds.createQuery(SitiosEstudio.class).filter("semilla.tipoDia","Normal"));
+            Iterator<SitiosEstudio> st= qry.aggregate(SitiosEstudio.class);
+            while(st.hasNext())
+            {
+                System.out.println(st.next());
+            }*/
+            Query<SitiosEstudio> matchQuery = ds.createQuery(SitiosEstudio.class).field("semilla.tipoDia").equal("Normal");
+            AggregationPipeline agg= ds.createAggregation(SitiosEstudio.class)
+                    .match(matchQuery)
+                    .project(Projection.projection("id","_id"));
+            Iterator <SitiosEstudio> st=agg.aggregate(SitiosEstudio.class);
+            if(st.hasNext())
+            {
+                System.out.println(st.next());
+            }
+
+            }
     }
 }

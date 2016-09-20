@@ -1,6 +1,11 @@
 package com.nubi.Utils;
 
 import com.nubi.colecciones.Localizacion;
+import sun.util.calendar.Gregorian;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by Felipe on 18/08/2016.
@@ -29,5 +34,17 @@ public class Calculador {
         double distance = R * c * 1000; // convert to meters
         distance = Math.pow(distance, 2);
         return Math.sqrt(distance);
+    }
+    public static boolean semanaCorte()
+    {
+        GregorianCalendar actual = new GregorianCalendar();
+        GregorianCalendar inicio = new GregorianCalendar();
+        inicio.set(2016, Calendar.JULY, 18);
+        long diferencia=((actual.getTimeInMillis()-inicio.getTimeInMillis())/604800000)+1;
+        if(diferencia==5 || diferencia==6 || diferencia==11 || diferencia==12|| diferencia==17 || diferencia==18)
+        {
+            return true;
+        }
+        return false;
     }
 }

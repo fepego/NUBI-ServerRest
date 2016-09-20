@@ -5,6 +5,9 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Felipe on 24/08/2016.
  */
@@ -19,17 +22,22 @@ public class SitiosEstudio {
     private String toleranciaRuido;
     @Embedded
     private Ruta ruta;
+    @Embedded
+    private List<Semilla> semilla;
 
 
     public SitiosEstudio() {
+        semilla=new ArrayList<Semilla>();
     }
 
-    public SitiosEstudio(String nombre, Localizacion localizacion, Estado estado, String toleranciaRuido, Ruta ruta) {
+    public SitiosEstudio(String nombre, Localizacion localizacion, Estado estado,
+                         String toleranciaRuido, Ruta ruta, List<Semilla> semilla) {
         this.nombre = nombre;
         this.localizacion = localizacion;
         this.estado = estado;
         this.toleranciaRuido = toleranciaRuido;
         this.ruta = ruta;
+        this.semilla = semilla;
     }
 
     public String getNombre() {
@@ -72,6 +80,14 @@ public class SitiosEstudio {
         this.ruta = ruta;
     }
 
+    public List<Semilla> getSemilla() {
+        return semilla;
+    }
+
+    public void setSemilla(List<Semilla> semilla) {
+        this.semilla = semilla;
+    }
+
     @Override
     public String toString() {
         return "SitiosEstudio{" +
@@ -80,6 +96,7 @@ public class SitiosEstudio {
                 ", estado=" + estado +
                 ", toleranciaRuido='" + toleranciaRuido + '\'' +
                 ", ruta=" + ruta +
+                ", semilla=" + semilla +
                 '}';
     }
 }
