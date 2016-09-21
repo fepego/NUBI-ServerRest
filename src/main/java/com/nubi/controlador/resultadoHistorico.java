@@ -3,14 +3,17 @@ package com.nubi.controlador;
 import com.nubi.colecciones.Fotocopiadora;
 import com.nubi.colecciones.Restaurante;
 import com.nubi.colecciones.SitiosEstudio;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 
 /**
  * Created by Felipe on 20/09/2016.
  */
+@Entity
 public class resultadoHistorico {
-    private Fotocopiadora fotocopiadora;
-    private SitiosEstudio sitiosEstudio;
-    private Restaurante restaurante;
+    @Id
+    private String nombreSitio;
     private double totalAlertasLibre;
     private double totalAlertasMedio;
     private double totalAlertasLLeno;
@@ -18,39 +21,19 @@ public class resultadoHistorico {
     public resultadoHistorico() {
     }
 
-    public resultadoHistorico(Fotocopiadora fotocopiadora, SitiosEstudio sitiosEstudio,
-                              Restaurante restaurante, double totalAlertasLibre, double totalAlertasMedio,
-                              double totalAlertasLLeno) {
-        this.fotocopiadora = fotocopiadora;
-        this.sitiosEstudio = sitiosEstudio;
-        this.restaurante = restaurante;
+    public resultadoHistorico(String nombreSitio, double totalAlertasLibre, double totalAlertasMedio, double totalAlertasLLeno) {
+        this.nombreSitio = nombreSitio;
         this.totalAlertasLibre = totalAlertasLibre;
         this.totalAlertasMedio = totalAlertasMedio;
         this.totalAlertasLLeno = totalAlertasLLeno;
     }
 
-    public Fotocopiadora getFotocopiadora() {
-        return fotocopiadora;
+    public String getNombreSitio() {
+        return nombreSitio;
     }
 
-    public void setFotocopiadora(Fotocopiadora fotocopiadora) {
-        this.fotocopiadora = fotocopiadora;
-    }
-
-    public SitiosEstudio getSitiosEstudio() {
-        return sitiosEstudio;
-    }
-
-    public void setSitiosEstudio(SitiosEstudio sitiosEstudio) {
-        this.sitiosEstudio = sitiosEstudio;
-    }
-
-    public Restaurante getRestaurante() {
-        return restaurante;
-    }
-
-    public void setRestaurante(Restaurante restaurante) {
-        this.restaurante = restaurante;
+    public void setNombreSitio(String nombreSitio) {
+        this.nombreSitio = nombreSitio;
     }
 
     public double getTotalAlertasLibre() {
@@ -80,9 +63,7 @@ public class resultadoHistorico {
     @Override
     public String toString() {
         return "resultadoHistorico{" +
-                "fotocopiadora=" + fotocopiadora +
-                ", sitiosEstudio=" + sitiosEstudio +
-                ", restaurante=" + restaurante +
+                "nombreSitio='" + nombreSitio + '\'' +
                 ", totalAlertasLibre=" + totalAlertasLibre +
                 ", totalAlertasMedio=" + totalAlertasMedio +
                 ", totalAlertasLLeno=" + totalAlertasLLeno +

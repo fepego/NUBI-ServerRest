@@ -7,7 +7,9 @@ import com.nubi.IntegracionBD.ModeloNubi;
 import com.nubi.IntegracionBD.ModeloNubiImp;
 import com.nubi.Utils.Calculador;
 import com.nubi.colecciones.*;
+import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.StatelessKieSession;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
@@ -31,19 +33,19 @@ public class test {
     private static List<Candidato> candidatos;
     public static void main(String[] args) {
         try {
-//            // load up the knowledge base
-//            KieServices ks = KieServices.Factory.get();
-//            KieContainer kContainer = ks.getKieClasspathContainer();
-//            //KieSession kSession = kContainer.newKieSession("ksession-rules");
+           // load up the knowledge base
+             KieServices ks = KieServices.Factory.get();
+             KieContainer kContainer = ks.getKieClasspathContainer();
+             //KieSession kSession = kContainer.newKieSession("ksession-rules");
 //
 //            buscarRestaurantes();
 //            buscarUsuario();
 //            candidatos= new ArrayList<Candidato>();
 //            buscarSitioEstudio();
-//            EjecutarReglasSitioEstudio(kContainer);
+            //EjecutarReglasSitioEstudio(kContainer);
 //            buscarRestaurantes();
 //            EjecutarReglasRestaurante(kContainer);
-              probabilidadAlertas();
+              probabilidadAlertas(kContainer);
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -100,37 +102,75 @@ public class test {
         }
     }
 
-    public static void probabilidadAlertas()
+    public static void probabilidadAlertas(KieContainer kContainer)
     {
 
         ModeloNubi mod= new ModeloNubiImp();
-        Iterator <resultadoHistorico> res=mod.getHistoricoSitioEst("Ing 4 piso");
-        while (res.hasNext())
-        {
-            System.out.println(res.next().toString());
-        }
-        /*if(!Calculador.semanaCorte())
+        //variables de calculo de probabilidad alertas de los 3 estados
+        double probaltLib,probaltMed,probaltLlen;
+        //Variables de calculo probabilidad de historicos de los 3 estados
+        double probHistLibre, probHistMedio, probHistLleno;
+        //Variables para calculo de probabilidad de Bayes con semilla y alertas
+        double problibre, probMedia, probLleno;
+        //Variables para calculo de probabilidad de bayes (x/alertas) e historicos
+        double probFinLibre, probFinmedia,probFinLleno;
+        double totalAlertasLibres,totalAlertasMedia,totalalertasLleno, total,totalHist;
+        Iterator <Alerta> alt;
+        Iterator <SitiosEstudio> sitEst;
+        Iterator <resultadoHistorico> resHist;
+
+        if(!Calculador.semanaCorte())
         {
             //Calcular primero semilla del dia y la hora
-            double ProbaltLib,ProbaltMed,ProbaltLlen;
-            int totalAlertasLibres,totalAlertasMedia,totalalertasLleno, total;
-            Iterator <Alerta> alt;
-            Iterator <SitiosEstudio> sitEst= mod.semillaSitiosEst("Normal");
+            sitEst= mod.semillaSitiosEst("Normal");
             insertaralt();
-            while (sitEst.hasNext())
-            {
-                SitiosEstudio s= sitEst.next();
-                alt=mod.consultarAlertas("libre",s.getNombre());
-                totalAlertasLibres=mod.contadorAlertas("Libre",s.getNombre());
-                totalAlertasMedia=mod.contadorAlertas("Medio",s.getNombre());
-                totalalertasLleno=mod.contadorAlertas("LLeno",s.getNombre());
-                total=totalAlertasLibres+totalAlertasMedia+totalalertasLleno;
-                System.out.println("total: "+total);
+            //insertHistoricos();
+            while (sitEst.hasNext()) {
+                SitiosEstudio s = sitEst.next();
+                System.out.println(s.getNombre());
+                alt = mod.consultarAlertas("Libre", s.getNombre());
+                totalAlertasLibres = mod.contadorAlertas("Libre", s.getNombre());
+                totalAlertasMedia = mod.contadorAlertas("Medio", s.getNombre());
+                totalalertasLleno = mod.contadorAlertas("LLeno", s.getNombre());
+                total = totalAlertasLibres + totalAlertasMedia + totalalertasLleno;
+                System.out.println("total: " + total);
+                //calculo probabilidad de disponibilidad por alertas
+                probaltLib= totalAlertasLibres/total;
+                System.out.println("ptob lib"+totalAlertasLibres);
+                probaltMed= totalAlertasMedia/total;
+                probaltLlen= totalalertasLleno/total;
+                System.out.println("prob alertas: "+probaltLib+" "+probaltMed+" "+probaltLlen);
+                resHist=mod.getHistoricoSitioEst("Ing 4 piso");
+                //Calculo bayes dado: la probabilidad de que este en algun estado (libre, medio, lleno) dada la probabilidad
+                // de alertas y semilla
+                problibre=(probaltLib*0.3)/((probaltLib*0.3)+(probaltMed*0.5)+(probaltLlen*0.2));
+                probMedia=(probaltMed*0.5)/((probaltLib*0.3)+(probaltMed*0.5)+(probaltLlen*0.2));
+                probLleno=(probaltLlen*0.2)/((probaltLib*0.3)+(probaltMed*0.5)+(probaltLlen*0.2));
+                System.out.println("rprobabilidades semilla y alt: "+problibre+ " "+probMedia+" "+probLleno);
+                if(resHist.hasNext() && resHist!=null)
+                {
+                    resultadoHistorico aux=resHist.next();
+                    totalHist= (int) (aux.getTotalAlertasLibre()+aux.getTotalAlertasMedio()+aux.getTotalAlertasLibre());
+                    System.out.println("total hist"+totalHist);
+                    probHistLibre=aux.getTotalAlertasLibre()/totalHist;
+                    probHistMedio=aux.getTotalAlertasMedio()/totalHist;
+                    probHistLleno=aux.getTotalAlertasLLeno()/totalHist;
+                    System.out.println("prob historico"+ probHistLibre+" "+probHistMedio+" "+probHistLleno);
+                    //calculo bayes de cualquier estado dadas la prob de (semilla/alertas) e historico
+                    probFinLibre=(problibre*probHistLibre)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                    probFinmedia=(probMedia*probHistMedio)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                    probFinLleno=(probLleno*probHistLleno)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                    System.out.println("probabilidades sem/alt e hist "+probFinLibre+" "+probFinmedia+" "+probFinLleno);
+                    probabilidades prob= new probabilidades(probFinLibre,probFinmedia,probFinLleno);
+                    StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
+                    kSession.execute(prob);
+                }
+            }
 
 
 
 
-        }*/
+        }
     }
     public static void insertaralt()
     {
@@ -139,36 +179,26 @@ public class test {
         System.out.println(new Date());
         s.setNombre("Ing 4 piso");
         alt.setComentario("hola mundo");
-        alt.setEstado("Libre");
+        alt.setEstado("LLeno");
         alt.setSitioEst(s);
         ModeloNubi mod= new ModeloNubiImp();
         mod.agregarAlerta(alt);
+    }
+    public static void insertHistoricos()
+    {
+        ModeloNubi mod= new ModeloNubiImp();
+        HistorialSitios hist= new HistorialSitios();
+        SitiosEstudio s= new SitiosEstudio();
+        s.setNombre("Ing 4 piso");
+        hist.setDisponibilidad(0.7);
+        hist.setNumAlertasLibre(4);
+        hist.setNumAlertasMedia(10);
+        hist.setNumAlertasLleno(4);
+        hist.setSitiosEstudio(s);
+        mod.addHistoricoSitioEst(hist);
     }
 }
 
 
 
-//AGREGAR ALERTA      BORRRRRRAAAAAARR!!
-/*
-Alerta alt= new Alerta();
-    SitiosEstudio s=new SitiosEstudio();
-        System.out.println(new Date());
-                s.setNombre("Ing 4 piso");
-                alt.setComentario("hola mundo");
-                alt.setEstado("Libre");
-                alt.setSitioEst(s);
-                ModeloNubi mod= new ModeloNubiImp();
-                mod.agregarAlerta(alt);
 
-HistorialSitios hist= new HistorialSitios();
-        SitiosEstudio s= new SitiosEstudio();
-        s.setNombre("Ing 4 piso");
-        hist.setDisponibilidad(0.7);
-        hist.setNumAlertasLibre(0);
-        hist.setNumAlertasMedia(5);
-        hist.setNumAlertasLleno(10);
-        hist.setSitiosEstudio(s);
-        mod.addHistoricoSitioEst(hist);
-
-
-*/

@@ -1,0 +1,23 @@
+package resources.rules.Retroalimentacion;
+import com.nubi.controlador.probabilidades
+dialect  "mvel"
+
+rule "Regla de probabilidad de disponibilidad  sitio libre"
+    when
+        p: probabilidades( probLibre> probMedia && probLibre>probLLeno)
+    then
+        System.out.println("el sitio esta libre segun probabilidad");
+end
+rule "Regla de probabilidad de disponibilidad sitio Media"
+    when
+        p: probabilidades( probMedia> probLibre && probMedia>probLLeno)
+    then
+        System.out.println("el sitio esta Medio segun probabilidad");
+end
+rule "Regla de probabilidad de disponibilidad sitio LLeno"
+    when
+        p: probabilidades( probLLeno> probLibre && probLLeno>probMedia)
+    then
+        System.out.println("el sitio esta LLeno segun probabilidad");
+end
+

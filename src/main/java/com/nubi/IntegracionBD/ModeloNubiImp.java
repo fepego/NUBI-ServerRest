@@ -38,8 +38,6 @@ public class ModeloNubiImp implements ModeloNubi {
         d.setYear(71);
         d.setMonth(0);
         d.setDate(1);
-        d.setHours(7);
-        d.setMinutes(30);
         long hora=d.getTime()-fechaCte.getTimeInMillis();
         AggregationPipeline agg= ds.createAggregation(SitiosEstudio.class)
                 .unwind("semilla")
@@ -154,7 +152,6 @@ public class ModeloNubiImp implements ModeloNubi {
         fecha.setHours(0);
         fecha.setMinutes(0);
         Date fechaInt=  new Date();
-        fechaInt.setHours(19);
         fechaInt.setHours(fechaInt.getHours()-1);
         long horamin=fechaInt.getTime()-fecha.getTime();
         fechaInt.setHours(fechaInt.getHours()+2);
