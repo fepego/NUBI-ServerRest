@@ -147,7 +147,13 @@ public class test {
                 probMedia=(probaltMed*0.5)/((probaltLib*0.3)+(probaltMed*0.5)+(probaltLlen*0.2));
                 probLleno=(probaltLlen*0.2)/((probaltLib*0.3)+(probaltMed*0.5)+(probaltLlen*0.2));
                 System.out.println("rprobabilidades semilla y alt: "+problibre+ " "+probMedia+" "+probLleno);
-                if(resHist.hasNext() && resHist!=null)
+                if(resHist==null)
+                {
+                    probabilidades prob= new probabilidades(problibre,probMedia,probLleno);
+                    StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
+                    kSession.execute(prob);
+                }
+                else
                 {
                     resultadoHistorico aux=resHist.next();
                     totalHist= (int) (aux.getTotalAlertasLibre()+aux.getTotalAlertasMedio()+aux.getTotalAlertasLibre());
@@ -179,7 +185,7 @@ public class test {
         System.out.println(new Date());
         s.setNombre("Ing 4 piso");
         alt.setComentario("hola mundo");
-        alt.setEstado("LLeno");
+        alt.setEstado("Libre");
         alt.setSitioEst(s);
         ModeloNubi mod= new ModeloNubiImp();
         mod.agregarAlerta(alt);
