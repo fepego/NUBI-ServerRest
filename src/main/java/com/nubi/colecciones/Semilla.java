@@ -11,9 +11,9 @@ import java.util.Date;
 @Entity
 public class Semilla {
     @Indexed
-    private Date horaInicio;
+    private long horaInicio;
     @Indexed
-    private Date horaFin;
+    private long horaFin;
     private double disponibilidad;
     private String tipoDia;
     private String dia;
@@ -22,7 +22,7 @@ public class Semilla {
     public Semilla() {
     }
 
-    public Semilla(Date horaInicio, Date horaFin, double disponibilidad, String tipoDia, String dia) {
+    public Semilla(long horaInicio, long horaFin, double disponibilidad, String tipoDia, String dia) {
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
         this.disponibilidad = disponibilidad;
@@ -30,19 +30,19 @@ public class Semilla {
         this.dia = dia;
     }
 
-    public Date getHoraInicio() {
+    public long getHoraInicio() {
         return horaInicio;
     }
 
-    public void setHoraInicio(Date horaInicio) {
+    public void setHoraInicio(long horaInicio) {
         this.horaInicio = horaInicio;
     }
 
-    public Date getHoraFin() {
+    public long getHoraFin() {
         return horaFin;
     }
 
-    public void setHoraFin(Date horaFin) {
+    public void setHoraFin(long horaFin) {
         this.horaFin = horaFin;
     }
 
@@ -68,5 +68,16 @@ public class Semilla {
 
     public void setDia(String dia) {
         this.dia = dia;
+    }
+
+    @Override
+    public String toString() {
+        return "Semilla{" +
+                "horaInicio=" + horaInicio +
+                ", horaFin=" + horaFin +
+                ", disponibilidad=" + disponibilidad +
+                ", tipoDia='" + tipoDia + '\'' +
+                ", dia='" + dia + '\'' +
+                '}';
     }
 }

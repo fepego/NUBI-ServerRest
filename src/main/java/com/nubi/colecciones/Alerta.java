@@ -1,8 +1,7 @@
 package com.nubi.colecciones;
 
 import org.apache.commons.codec.binary.Base64;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Reference;
+import org.mongodb.morphia.annotations.*;
 
 import java.util.Date;
 
@@ -10,8 +9,12 @@ import java.util.Date;
  * Created by felipe on 13/09/16.
  */
 @Entity
+@Indexes({@Index(value="fechaPublicacion"),
+        @Index(value="horaPublicacion")
+})
 public class Alerta {
-    private Date horaPublicacion;
+
+    private long  horaPublicacion;
     private String estado;
     private String comentario;
     @Reference
@@ -24,8 +27,8 @@ public class Alerta {
     public Alerta() {
     }
 
-    public Alerta(Date horaPublicacion, String estado, String comentario,
-                  SitiosEstudio sitioEst, Restaurante restaurante, Fotocopiadora fotocopiadora) {
+    public Alerta(long horaPublicacion, String estado,
+                  String comentario, SitiosEstudio sitioEst, Restaurante restaurante, Fotocopiadora fotocopiadora) {
         this.horaPublicacion = horaPublicacion;
         this.estado = estado;
         this.comentario = comentario;
@@ -34,11 +37,11 @@ public class Alerta {
         this.fotocopiadora = fotocopiadora;
     }
 
-    public Date getHoraPublicacion() {
+    public long getHoraPublicacion() {
         return horaPublicacion;
     }
 
-    public void setHoraPublicacion(Date horaPublicacion) {
+    public void setHoraPublicacion(long horaPublicacion) {
         this.horaPublicacion = horaPublicacion;
     }
 
@@ -80,5 +83,17 @@ public class Alerta {
 
     public void setFotocopiadora(Fotocopiadora fotocopiadora) {
         this.fotocopiadora = fotocopiadora;
+    }
+
+    @Override
+    public String toString() {
+        return "Alerta{" +
+                "horaPublicacion=" + horaPublicacion +
+                ", estado='" + estado + '\'' +
+                ", comentario='" + comentario + '\'' +
+                ", sitioEst=" + sitioEst +
+                ", restaurante=" + restaurante +
+                ", fotocopiadora=" + fotocopiadora +
+                '}';
     }
 }

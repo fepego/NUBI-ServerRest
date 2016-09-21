@@ -14,8 +14,8 @@ import java.util.Date;
 public class HistorialSitios {
     @Indexed(expireAfterSeconds = 691200)
     @Id
-    private Date horaConsulta;
-    private String diaRegistro;
+    private long horaConsulta;
+    private String dia;
     private double numAlertasLibre;
     private double numAlertasMedia;
     private double numAlertasLleno;
@@ -27,11 +27,11 @@ public class HistorialSitios {
     public HistorialSitios() {
     }
 
-    public HistorialSitios(Date horaConsulta, String diaRegistro, double numAlertasLibre,
-                           double numAlertasMedia, double numAlertasLleno, double disponibilidad,
-                           SitiosEstudio sitiosEstudio) {
+    public HistorialSitios(long horaConsulta, String dia,
+                           double numAlertasLibre, double numAlertasMedia, double numAlertasLleno,
+                           double disponibilidad, SitiosEstudio sitiosEstudio) {
         this.horaConsulta = horaConsulta;
-        this.diaRegistro = diaRegistro;
+        this.dia = dia;
         this.numAlertasLibre = numAlertasLibre;
         this.numAlertasMedia = numAlertasMedia;
         this.numAlertasLleno = numAlertasLleno;
@@ -39,20 +39,20 @@ public class HistorialSitios {
         this.sitiosEstudio = sitiosEstudio;
     }
 
-    public Date getHoraConsulta() {
+    public long getHoraConsulta() {
         return horaConsulta;
     }
 
-    public void setHoraConsulta(Date horaConsulta) {
+    public void setHoraConsulta(long horaConsulta) {
         this.horaConsulta = horaConsulta;
     }
 
-    public String getDiaRegistro() {
-        return diaRegistro;
+    public String getDia() {
+        return dia;
     }
 
-    public void setDiaRegistro(String diaRegistro) {
-        this.diaRegistro = diaRegistro;
+    public void setDia(String dia) {
+        this.dia = dia;
     }
 
     public double getNumAlertasLibre() {
@@ -93,5 +93,18 @@ public class HistorialSitios {
 
     public void setSitiosEstudio(SitiosEstudio sitiosEstudio) {
         this.sitiosEstudio = sitiosEstudio;
+    }
+
+    @Override
+    public String toString() {
+        return "HistorialSitios{" +
+                "horaConsulta=" + horaConsulta +
+                ", dia='" + dia + '\'' +
+                ", numAlertasLibre=" + numAlertasLibre +
+                ", numAlertasMedia=" + numAlertasMedia +
+                ", numAlertasLleno=" + numAlertasLleno +
+                ", disponibilidad=" + disponibilidad +
+                ", sitiosEstudio=" + sitiosEstudio +
+                '}';
     }
 }

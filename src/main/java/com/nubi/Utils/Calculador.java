@@ -47,4 +47,20 @@ public class Calculador {
         }
         return false;
     }
+    public static String diaString(int dia)
+    {
+        if(dia==1)
+            return "lunes";
+        if(dia==2)
+            return "martes";
+        if(dia==3)
+            return "miercoles";
+        if(dia==4)
+            return "jueves";
+        if(dia==5)
+            return "viernes";
+        if(dia==6)
+            return "sabado";
+        return null;
+    }
 }

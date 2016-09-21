@@ -3,11 +3,10 @@ package com.nubi.controlador;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
+import com.nubi.IntegracionBD.ModeloNubi;
+import com.nubi.IntegracionBD.ModeloNubiImp;
 import com.nubi.Utils.Calculador;
-import com.nubi.colecciones.Restaurante;
-import com.nubi.colecciones.Semilla;
-import com.nubi.colecciones.SitiosEstudio;
-import com.nubi.colecciones.Usuario;
+import com.nubi.colecciones.*;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.StatelessKieSession;
 import org.mongodb.morphia.Datastore;
@@ -16,10 +15,9 @@ import org.mongodb.morphia.aggregation.AggregationPipeline;
 import org.mongodb.morphia.aggregation.Projection;
 import org.mongodb.morphia.query.Query;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
+import static org.mongodb.morphia.aggregation.Projection.projection;
 
 /**
  * Created by Felipe on 18/08/2016.
@@ -29,9 +27,7 @@ public class test {
     private static List<Restaurante> qrList;
     private static List <Usuario> usu;
     private static List <SitiosEstudio> sts;
-    private static MongoClient cli= new MongoClient("localhost",27017);
-    private static Morphia mph= new Morphia();
-    private static Datastore ds= mph.createDatastore(cli,"NUBI");
+
     private static List<Candidato> candidatos;
     public static void main(String[] args) {
         try {
@@ -103,58 +99,76 @@ public class test {
             }
         }
     }
-    public static void buscarRestaurantes()
-    {
-        Query<Restaurante> qry= ds.createQuery(Restaurante.class);
 
-        qrList=ds.find(qry.getEntityClass()).asList();
-
-    }
-    public static void buscarUsuario()
-    {
-        Query<Usuario> qry= ds.createQuery(Usuario.class);
-
-        usu=ds.find(qry.getEntityClass()).asList();
-
-    }
-    public static void buscarSitioEstudio()
-    {
-        Query<SitiosEstudio> qry= ds.createQuery(SitiosEstudio.class);
-        sts= ds.find(qry.getEntityClass()).asList();
-    }
-    public static void actualizar()
-    {
-        Date fecha= new Date();
-        Query<SitiosEstudio> qry= ds.createQuery(SitiosEstudio.class);
-        sts= ds.find(qry.getEntityClass()).asList();
-        sts.get(0).setSemilla(new ArrayList<Semilla>());
-        sts.get(0).getSemilla().add(new Semilla());
-        sts.get(0).getSemilla().get(0).setHoraInicio(fecha);
-        ds.save(sts);
-
-    }
     public static void probabilidadAlertas()
     {
-        if(!Calculador.semanaCorte())
-        {
-           /* AggregationPipeline qry= ds.createAggregation(SitiosEstudio.class);
-            qry.unwind("semilla");
-            qry.match(ds.createQuery(SitiosEstudio.class).filter("semilla.tipoDia","Normal"));
-            Iterator<SitiosEstudio> st= qry.aggregate(SitiosEstudio.class);
-            while(st.hasNext())
-            {
-                System.out.println(st.next());
-            }*/
-            Query<SitiosEstudio> matchQuery = ds.createQuery(SitiosEstudio.class).field("semilla.tipoDia").equal("Normal");
-            AggregationPipeline agg= ds.createAggregation(SitiosEstudio.class)
-                    .match(matchQuery)
-                    .project(Projection.projection("id","_id"));
-            Iterator <SitiosEstudio> st=agg.aggregate(SitiosEstudio.class);
-            if(st.hasNext())
-            {
-                System.out.println(st.next());
-            }
 
-            }
+        ModeloNubi mod= new ModeloNubiImp();
+        Iterator <resultadoHistorico> res=mod.getHistoricoSitioEst("Ing 4 piso");
+        while (res.hasNext())
+        {
+            System.out.println(res.next().toString());
+        }
+        /*if(!Calculador.semanaCorte())
+        {
+            //Calcular primero semilla del dia y la hora
+            double ProbaltLib,ProbaltMed,ProbaltLlen;
+            int totalAlertasLibres,totalAlertasMedia,totalalertasLleno, total;
+            Iterator <Alerta> alt;
+            Iterator <SitiosEstudio> sitEst= mod.semillaSitiosEst("Normal");
+            insertaralt();
+            while (sitEst.hasNext())
+            {
+                SitiosEstudio s= sitEst.next();
+                alt=mod.consultarAlertas("libre",s.getNombre());
+                totalAlertasLibres=mod.contadorAlertas("Libre",s.getNombre());
+                totalAlertasMedia=mod.contadorAlertas("Medio",s.getNombre());
+                totalalertasLleno=mod.contadorAlertas("LLeno",s.getNombre());
+                total=totalAlertasLibres+totalAlertasMedia+totalalertasLleno;
+                System.out.println("total: "+total);
+
+
+
+
+        }*/
+    }
+    public static void insertaralt()
+    {
+        Alerta alt= new Alerta();
+        SitiosEstudio s=new SitiosEstudio();
+        System.out.println(new Date());
+        s.setNombre("Ing 4 piso");
+        alt.setComentario("hola mundo");
+        alt.setEstado("Libre");
+        alt.setSitioEst(s);
+        ModeloNubi mod= new ModeloNubiImp();
+        mod.agregarAlerta(alt);
     }
 }
+
+
+
+//AGREGAR ALERTA      BORRRRRRAAAAAARR!!
+/*
+Alerta alt= new Alerta();
+    SitiosEstudio s=new SitiosEstudio();
+        System.out.println(new Date());
+                s.setNombre("Ing 4 piso");
+                alt.setComentario("hola mundo");
+                alt.setEstado("Libre");
+                alt.setSitioEst(s);
+                ModeloNubi mod= new ModeloNubiImp();
+                mod.agregarAlerta(alt);
+
+HistorialSitios hist= new HistorialSitios();
+        SitiosEstudio s= new SitiosEstudio();
+        s.setNombre("Ing 4 piso");
+        hist.setDisponibilidad(0.7);
+        hist.setNumAlertasLibre(0);
+        hist.setNumAlertasMedia(5);
+        hist.setNumAlertasLleno(10);
+        hist.setSitiosEstudio(s);
+        mod.addHistoricoSitioEst(hist);
+
+
+*/
