@@ -5,52 +5,53 @@ import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Indexed;
 import org.mongodb.morphia.annotations.Reference;
 
+import java.util.Date;
+
 /**
  * Created by felipe on 13/09/16.
  */
 @Entity
-public class HistorialSitios {
+public class HistorialFotocopiadoras {
     @Indexed(expireAfterSeconds = 691200)
     @Id
-    private long horaConsulta;
-    private String dia;
+    private Date horaConsulta;
+    private String diaRegistro;
     private double numAlertasLibre;
     private double numAlertasMedia;
     private double numAlertasLleno;
     private double disponibilidad;
     @Reference
-    private SitiosEstudio sitiosEstudio;
+    private Fotocopiadora fotocopiadora;
 
 
-    public HistorialSitios() {
+    public HistorialFotocopiadoras() {
     }
 
-    public HistorialSitios(long horaConsulta, String dia,
-                           double numAlertasLibre, double numAlertasMedia, double numAlertasLleno,
-                           double disponibilidad, SitiosEstudio sitiosEstudio) {
+    public HistorialFotocopiadoras(Date horaConsulta, String diaRegistro, double numAlertasLibre, double numAlertasMedia,
+                                   double numAlertasLleno, double disponibilidad, Fotocopiadora fotocopiadora) {
         this.horaConsulta = horaConsulta;
-        this.dia = dia;
+        this.diaRegistro = diaRegistro;
         this.numAlertasLibre = numAlertasLibre;
         this.numAlertasMedia = numAlertasMedia;
         this.numAlertasLleno = numAlertasLleno;
         this.disponibilidad = disponibilidad;
-        this.sitiosEstudio = sitiosEstudio;
+        this.fotocopiadora = fotocopiadora;
     }
 
-    public long getHoraConsulta() {
+    public Date getHoraConsulta() {
         return horaConsulta;
     }
 
-    public void setHoraConsulta(long horaConsulta) {
+    public void setHoraConsulta(Date horaConsulta) {
         this.horaConsulta = horaConsulta;
     }
 
-    public String getDia() {
-        return dia;
+    public String getDiaRegistro() {
+        return diaRegistro;
     }
 
-    public void setDia(String dia) {
-        this.dia = dia;
+    public void setDiaRegistro(String diaRegistro) {
+        this.diaRegistro = diaRegistro;
     }
 
     public double getNumAlertasLibre() {
@@ -85,24 +86,11 @@ public class HistorialSitios {
         this.disponibilidad = disponibilidad;
     }
 
-    public SitiosEstudio getSitiosEstudio() {
-        return sitiosEstudio;
+    public Fotocopiadora getFotocopiadora() {
+        return fotocopiadora;
     }
 
-    public void setSitiosEstudio(SitiosEstudio sitiosEstudio) {
-        this.sitiosEstudio = sitiosEstudio;
-    }
-
-    @Override
-    public String toString() {
-        return "HistorialSitios{" +
-                "horaConsulta=" + horaConsulta +
-                ", dia='" + dia + '\'' +
-                ", numAlertasLibre=" + numAlertasLibre +
-                ", numAlertasMedia=" + numAlertasMedia +
-                ", numAlertasLleno=" + numAlertasLleno +
-                ", disponibilidad=" + disponibilidad +
-                ", sitiosEstudio=" + sitiosEstudio +
-                '}';
+    public void setFotocopiadora(Fotocopiadora fotocopiadora) {
+        this.fotocopiadora = fotocopiadora;
     }
 }

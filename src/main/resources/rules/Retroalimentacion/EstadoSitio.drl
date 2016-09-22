@@ -1,5 +1,5 @@
 package resources.rules.Retroalimentacion;
-import com.nubi.controlador.probabilidades
+import com.nubi.ModuloAdaptacion.probabilidades
 dialect  "mvel"
 
 rule "Regla de probabilidad de disponibilidad  sitio libre"

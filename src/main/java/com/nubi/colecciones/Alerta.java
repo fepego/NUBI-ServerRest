@@ -1,9 +1,9 @@
 package com.nubi.colecciones;
 
-import org.apache.commons.codec.binary.Base64;
-import org.mongodb.morphia.annotations.*;
-
-import java.util.Date;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Index;
+import org.mongodb.morphia.annotations.Indexes;
+import org.mongodb.morphia.annotations.Reference;
 
 /**
  * Created by felipe on 13/09/16.

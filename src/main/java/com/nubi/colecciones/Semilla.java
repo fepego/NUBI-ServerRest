@@ -3,8 +3,6 @@ package com.nubi.colecciones;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Indexed;
 
-import java.util.Date;
-
 /**
  * Created by felipe on 13/09/16.
  */
@@ -14,7 +12,9 @@ public class Semilla {
     private long horaInicio;
     @Indexed
     private long horaFin;
-    private double disponibilidad;
+    private double probLibre;
+    private double probMedia;
+    private double probAlta;
     private String tipoDia;
     private String dia;
 
@@ -22,10 +22,13 @@ public class Semilla {
     public Semilla() {
     }
 
-    public Semilla(long horaInicio, long horaFin, double disponibilidad, String tipoDia, String dia) {
+    public Semilla(long horaInicio, long horaFin, double probLibre,
+                   double probMedia, double probAlta, String tipoDia, String dia) {
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
-        this.disponibilidad = disponibilidad;
+        this.probLibre = probLibre;
+        this.probMedia = probMedia;
+        this.probAlta = probAlta;
         this.tipoDia = tipoDia;
         this.dia = dia;
     }
@@ -46,12 +49,28 @@ public class Semilla {
         this.horaFin = horaFin;
     }
 
-    public double getDisponibilidad() {
-        return disponibilidad;
+    public double getProbLibre() {
+        return probLibre;
     }
 
-    public void setDisponibilidad(double disponibilidad) {
-        this.disponibilidad = disponibilidad;
+    public void setProbLibre(double probLibre) {
+        this.probLibre = probLibre;
+    }
+
+    public double getProbMedia() {
+        return probMedia;
+    }
+
+    public void setProbMedia(double probMedia) {
+        this.probMedia = probMedia;
+    }
+
+    public double getProbAlta() {
+        return probAlta;
+    }
+
+    public void setProbAlta(double probAlta) {
+        this.probAlta = probAlta;
     }
 
     public String getTipoDia() {
@@ -75,7 +94,9 @@ public class Semilla {
         return "Semilla{" +
                 "horaInicio=" + horaInicio +
                 ", horaFin=" + horaFin +
-                ", disponibilidad=" + disponibilidad +
+                ", probLibre=" + probLibre +
+                ", probMedia=" + probMedia +
+                ", probAlta=" + probAlta +
                 ", tipoDia='" + tipoDia + '\'' +
                 ", dia='" + dia + '\'' +
                 '}';

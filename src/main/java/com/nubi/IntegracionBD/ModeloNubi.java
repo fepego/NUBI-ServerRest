@@ -1,11 +1,8 @@
 package com.nubi.IntegracionBD;
 
-import com.nubi.colecciones.Alerta;
-import com.nubi.colecciones.HistorialSitios;
-import com.nubi.colecciones.SitiosEstudio;
-import com.nubi.controlador.Sitio;
-import com.nubi.controlador.resultadoHistorico;
-import org.bson.Document;
+
+import com.nubi.ModuloAdaptacion.resultadoHistorico;
+import com.nubi.colecciones.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -21,4 +18,11 @@ public interface ModeloNubi {
     public Iterator<HistorialSitios> consultarHistoricoSitioEst(String id);
     public int contadorAlertas(String estado, String nombreSitio);
     public Iterator <resultadoHistorico>  getHistoricoSitioEst(String id);
+    public void actualizarSitioEstudio(String nombreSitio, double disponibilidad);
+    public void InsertarRuta(Ruta ruta);
+    public Iterator <Ruta> buscarRuta(double latInicio, double longInicio, double latDestino, double longDestino);
+    public  List<SitiosEstudio> buscarSitioEstudio();
+    public Usuario buscarUsuario(String usuario);
+    public void actualizarLocUsuario(String nombre, double latitud, double longitud);
+
 }

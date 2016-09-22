@@ -1,7 +1,6 @@
 package com.nubi.colecciones;
 
 import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Indexed;
 
 /**
  * Created by Felipe on 23/08/2016.

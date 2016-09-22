@@ -1,33 +1,38 @@
 package com.nubi.IntegracionBD;
 
 import com.mongodb.MongoClient;
+
+import com.nubi.ModuloAdaptacion.resultadoHistorico;
 import com.nubi.Utils.Calculador;
 import com.nubi.colecciones.*;
-import com.nubi.controlador.Sitio;
-import com.nubi.controlador.resultadoHistorico;
-import org.bson.Document;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.aggregation.Accumulator;
 import org.mongodb.morphia.aggregation.AggregationPipeline;
-import org.mongodb.morphia.query.Query;
 
-import java.util.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.mongodb.morphia.aggregation.Group.grouping;
-import static org.mongodb.morphia.aggregation.Group.sum;
 import static org.mongodb.morphia.aggregation.Projection.projection;
 
 /**
  * Created by Felipe on 20/09/2016.
  */
+@XmlRootElement
 public class ModeloNubiImp implements ModeloNubi {
-    private static MongoClient cli= new MongoClient("localhost",27017);
-    private static Morphia mph= new Morphia();
-    private static Datastore ds= mph.createDatastore(cli,"NUBI");
+    private static MongoClient cli;
+    private static Morphia mph;
+    private static Datastore ds;
     final GregorianCalendar fechaCte=new GregorianCalendar(1971,0,01,0,0);
 
     public ModeloNubiImp() {
+         cli= new MongoClient("localhost",27017);
+         mph= new Morphia();
+        ds= mph.createDatastore(cli,"NUBI");
     }
 
 
@@ -46,7 +51,9 @@ public class ModeloNubiImp implements ModeloNubi {
                 .match(ds.createQuery(SitiosEstudio.class).field("semilla.horaInicio").lessThan(hora))
                 .match(ds.createQuery(SitiosEstudio.class).field("semilla.horaFin").greaterThan(hora))
                 .project(projection("semilla.tipoDia"),
-                        projection("semilla.disponibilidad"),
+                        projection("semilla.probLibre"),
+                        projection("semilla.probMedia"),
+                        projection("semilla.probAlta"),
                         projection("semilla.dia"));
         Iterator<SitiosEstudio> st=agg.aggregate(SitiosEstudio.class);
         if(st.hasNext())
@@ -171,8 +178,61 @@ public class ModeloNubiImp implements ModeloNubi {
         }
         return null;
     }
+    public void actualizarSitioEstudio(String nombreSitio, double disponibilidad)
+    {
+        List <SitiosEstudio> sitiosEstudio= ds.createQuery(SitiosEstudio.class).field("_id").contains(nombreSitio).asList();
+        if(sitiosEstudio != null)
+        {
+            sitiosEstudio.get(0).getEstado().setDisponibilidad(disponibilidad);
+            ds.save(sitiosEstudio.get(0));
+        }
+    }
+    public void InsertarRuta(Ruta ruta)
+    {
+        if(ruta!=null)
+        {
+            ds.save(ruta);
+        }
+    }
+    public Iterator <Ruta> buscarRuta(double latInicio, double longInicio, double latDestino, double longDestino)
+    {
+        Iterator<Ruta> rutas=  ds.createQuery(Ruta.class).field("longDestino").equal(longDestino)
+                .field("latDestino").equal(latDestino)
+                .field("longInicio").greaterThanOrEq(longInicio-0.00005)
+                .field("longInicio").lessThanOrEq(longInicio+0.00005)
+                .field("latInicio").greaterThanOrEq(latInicio-0.00005)
+                .field("latInicio").lessThanOrEq(latInicio+0.00005).iterator();
+        if(rutas.hasNext())
+        {
+            return rutas;
+        }
+        return null;
+    }
+    public  List<SitiosEstudio> buscarSitioEstudio()
+    {
+        return  ds.createQuery(SitiosEstudio.class).asList();
 
+    }
+    public Usuario buscarUsuario(String usuario)
+    {
+        Usuario u = ds.createQuery(Usuario.class).field("_id").equal(usuario).asList().get(0);
 
+        if(u!=null)
+        {
+            return u;
+        }
+        return null;
+    }
+    public void actualizarLocUsuario(String nombre, double latitud, double longitud)
+    {
+        Usuario u= ds.createQuery(Usuario.class).field("_id").equal(nombre).asList().get(0);
+        if(u!=null)
+        {
+            u.getLocalizacion().setLatitud(latitud);
+            u.getLocalizacion().setLongitud(longitud);
+            ds.save(u);
+        }
+    }
    /* public static void buscarRestaurantes()
     {
         Query<Restaurante> qry= ds.createQuery(Restaurante.class);
@@ -187,11 +247,7 @@ public class ModeloNubiImp implements ModeloNubi {
         usu=ds.find(qry.getEntityClass()).asList();
 
     }
-    public static void buscarSitioEstudio()
-    {
-        Query<SitiosEstudio> qry= ds.createQuery(SitiosEstudio.class);
-        sts= ds.find(qry.getEntityClass()).asList();
-    }
+
 
     public static void actualizar()
     {

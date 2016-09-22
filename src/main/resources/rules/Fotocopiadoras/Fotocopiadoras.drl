@@ -1,6 +1,6 @@
 package rules.Fotocopiadoras;
 dialect  "mvel"
-import com.nubi.controlador.Candidato
+import com.nubi.ModuloAdaptacion.Candidato
 import com.nubi.colecciones.*
 
 
