@@ -3,11 +3,11 @@ package com.nubi.IntegracionMapzen;
 
 import com.nubi.IntegracionBD.ModeloNubi;
 import com.nubi.IntegracionBD.ModeloNubiImp;
-import com.nubi.IntegracionJaveriana.UsuarioJaveriana;
+import com.nubi.Utils.JsonReader;
 import com.nubi.colecciones.Ruta;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.nubi.Utils.JsonReader;
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -43,9 +43,9 @@ public class Mapzen {
 
 
             } catch (IOException ex) {
-                Logger.getLogger(UsuarioJaveriana.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Ruta.class.getName()).log(Level.SEVERE, null, ex);
             } catch (JSONException ex) {
-                Logger.getLogger(UsuarioJaveriana.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Ruta.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

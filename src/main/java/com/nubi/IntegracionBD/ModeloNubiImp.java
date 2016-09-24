@@ -1,7 +1,6 @@
 package com.nubi.IntegracionBD;
 
 import com.mongodb.MongoClient;
-
 import com.nubi.ModuloAdaptacion.resultadoHistorico;
 import com.nubi.Utils.Calculador;
 import com.nubi.colecciones.*;
