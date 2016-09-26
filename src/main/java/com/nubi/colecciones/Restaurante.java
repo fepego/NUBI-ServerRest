@@ -20,20 +20,18 @@ public class Restaurante {
     private Estado estado;
     @Embedded
     private List<Comentario> comentarios;
-    @Embedded
-    private List<Ruta> rutas;
+
 
     public Restaurante() {
         comentarios= new ArrayList<Comentario>();
-        rutas= new ArrayList<Ruta>();
+
     }
 
-    public Restaurante(String nombre, Localizacion localizacion, Estado estado, List<Comentario> comentarios, List<Ruta> rutas) {
+    public Restaurante(String nombre, Localizacion localizacion, Estado estado, List<Comentario> comentarios) {
         this.nombre = nombre;
         this.localizacion = localizacion;
         this.estado = estado;
         this.comentarios = comentarios;
-        this.rutas = rutas;
     }
 
     public String getNombre() {
@@ -68,11 +66,4 @@ public class Restaurante {
         this.comentarios = comentarios;
     }
 
-    public List<Ruta> getRutas() {
-        return rutas;
-    }
-
-    public void setRutas(List<Ruta> rutas) {
-        this.rutas = rutas;
-    }
 }

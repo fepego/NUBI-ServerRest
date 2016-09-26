@@ -20,7 +20,7 @@ public class SitiosEstudio {
     private Estado estado;
     private String toleranciaRuido;
     @Embedded
-    private Ruta ruta;
+    private List<Comentario> comentarios;
     @Embedded
     private List<Semilla> semilla;
 
@@ -30,12 +30,12 @@ public class SitiosEstudio {
     }
 
     public SitiosEstudio(String nombre, Localizacion localizacion, Estado estado,
-                         String toleranciaRuido, Ruta ruta, List<Semilla> semilla) {
+                         String toleranciaRuido, List<Comentario> comentarios, List<Semilla> semilla) {
         this.nombre = nombre;
         this.localizacion = localizacion;
         this.estado = estado;
         this.toleranciaRuido = toleranciaRuido;
-        this.ruta = ruta;
+        this.comentarios = comentarios;
         this.semilla = semilla;
     }
 
@@ -71,20 +71,20 @@ public class SitiosEstudio {
         this.toleranciaRuido = toleranciaRuido;
     }
 
-    public Ruta getRuta() {
-        return ruta;
-    }
-
-    public void setRuta(Ruta ruta) {
-        this.ruta = ruta;
-    }
-
     public List<Semilla> getSemilla() {
         return semilla;
     }
 
     public void setSemilla(List<Semilla> semilla) {
         this.semilla = semilla;
+    }
+
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
     }
 
     @Override
@@ -94,7 +94,7 @@ public class SitiosEstudio {
                 ", localizacion=" + localizacion +
                 ", estado=" + estado +
                 ", toleranciaRuido='" + toleranciaRuido + '\'' +
-                ", ruta=" + ruta +
+                ", comentarios=" + comentarios +
                 ", semilla=" + semilla +
                 '}';
     }
