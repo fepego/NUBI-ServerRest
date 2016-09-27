@@ -19,7 +19,6 @@ public class HistorialRestaurantes {
     private double numAlertasLibre;
     private double numAlertasMedia;
     private double numAlertasLleno;
-    private double disponibilidad;
     @Reference
     private Restaurante restaurante;
 
@@ -28,14 +27,13 @@ public class HistorialRestaurantes {
     }
 
     public HistorialRestaurantes(Date horaConsulta, String diaRegistro, double numAlertasLibre,
-                                 double numAlertasMedia, double numAlertasLleno, double disponibilidad,
+                                 double numAlertasMedia, double numAlertasLleno,
                                  Restaurante restaurante) {
         this.horaConsulta = horaConsulta;
         this.diaRegistro = diaRegistro;
         this.numAlertasLibre = numAlertasLibre;
         this.numAlertasMedia = numAlertasMedia;
         this.numAlertasLleno = numAlertasLleno;
-        this.disponibilidad = disponibilidad;
         this.restaurante = restaurante;
     }
 
@@ -77,14 +75,6 @@ public class HistorialRestaurantes {
 
     public void setNumAlertasLleno(double numAlertasLleno) {
         this.numAlertasLleno = numAlertasLleno;
-    }
-
-    public double getDisponibilidad() {
-        return disponibilidad;
-    }
-
-    public void setDisponibilidad(double disponibilidad) {
-        this.disponibilidad = disponibilidad;
     }
 
     public Restaurante getRestaurante() {

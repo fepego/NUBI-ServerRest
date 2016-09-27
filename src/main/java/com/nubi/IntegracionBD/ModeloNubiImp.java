@@ -232,13 +232,13 @@ public class ModeloNubiImp implements ModeloNubi {
             ds.save(u);
         }
     }
-   /* public static void buscarRestaurantes()
+    public  List<Restaurante> buscarRestaurantes()
     {
-        Query<Restaurante> qry= ds.createQuery(Restaurante.class);
 
-        qrList=ds.find(qry.getEntityClass()).asList();
+        return ds.createQuery(Restaurante.class).asList();
 
     }
+   /*
     public static void buscarUsuario()
     {
         Query<Usuario> qry= ds.createQuery(Usuario.class);

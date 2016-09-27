@@ -17,7 +17,6 @@ public class HistorialSitios {
     private double numAlertasLibre;
     private double numAlertasMedia;
     private double numAlertasLleno;
-    private double disponibilidad;
     @Reference
     private SitiosEstudio sitiosEstudio;
 
@@ -27,13 +26,12 @@ public class HistorialSitios {
 
     public HistorialSitios(long horaConsulta, String dia,
                            double numAlertasLibre, double numAlertasMedia, double numAlertasLleno,
-                           double disponibilidad, SitiosEstudio sitiosEstudio) {
+                            SitiosEstudio sitiosEstudio) {
         this.horaConsulta = horaConsulta;
         this.dia = dia;
         this.numAlertasLibre = numAlertasLibre;
         this.numAlertasMedia = numAlertasMedia;
         this.numAlertasLleno = numAlertasLleno;
-        this.disponibilidad = disponibilidad;
         this.sitiosEstudio = sitiosEstudio;
     }
 
@@ -77,13 +75,6 @@ public class HistorialSitios {
         this.numAlertasLleno = numAlertasLleno;
     }
 
-    public double getDisponibilidad() {
-        return disponibilidad;
-    }
-
-    public void setDisponibilidad(double disponibilidad) {
-        this.disponibilidad = disponibilidad;
-    }
 
     public SitiosEstudio getSitiosEstudio() {
         return sitiosEstudio;
@@ -101,7 +92,6 @@ public class HistorialSitios {
                 ", numAlertasLibre=" + numAlertasLibre +
                 ", numAlertasMedia=" + numAlertasMedia +
                 ", numAlertasLleno=" + numAlertasLleno +
-                ", disponibilidad=" + disponibilidad +
                 ", sitiosEstudio=" + sitiosEstudio +
                 '}';
     }

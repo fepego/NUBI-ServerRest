@@ -19,7 +19,6 @@ public class HistorialFotocopiadoras {
     private double numAlertasLibre;
     private double numAlertasMedia;
     private double numAlertasLleno;
-    private double disponibilidad;
     @Reference
     private Fotocopiadora fotocopiadora;
 
@@ -28,13 +27,12 @@ public class HistorialFotocopiadoras {
     }
 
     public HistorialFotocopiadoras(Date horaConsulta, String diaRegistro, double numAlertasLibre, double numAlertasMedia,
-                                   double numAlertasLleno, double disponibilidad, Fotocopiadora fotocopiadora) {
+                                   double numAlertasLleno, Fotocopiadora fotocopiadora) {
         this.horaConsulta = horaConsulta;
         this.diaRegistro = diaRegistro;
         this.numAlertasLibre = numAlertasLibre;
         this.numAlertasMedia = numAlertasMedia;
         this.numAlertasLleno = numAlertasLleno;
-        this.disponibilidad = disponibilidad;
         this.fotocopiadora = fotocopiadora;
     }
 
@@ -76,14 +74,6 @@ public class HistorialFotocopiadoras {
 
     public void setNumAlertasLleno(double numAlertasLleno) {
         this.numAlertasLleno = numAlertasLleno;
-    }
-
-    public double getDisponibilidad() {
-        return disponibilidad;
-    }
-
-    public void setDisponibilidad(double disponibilidad) {
-        this.disponibilidad = disponibilidad;
     }
 
     public Fotocopiadora getFotocopiadora() {
