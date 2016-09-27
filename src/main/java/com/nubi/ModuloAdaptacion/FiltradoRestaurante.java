@@ -2,7 +2,9 @@ package com.nubi.ModuloAdaptacion;
 
 import com.nubi.IntegracionBD.ModeloNubi;
 import com.nubi.IntegracionBD.ModeloNubiImp;
+import com.nubi.IntegracionMapzen.Mapzen;
 import com.nubi.colecciones.Restaurante;
+import com.nubi.colecciones.Ruta;
 import com.nubi.colecciones.SitiosEstudio;
 import com.nubi.colecciones.Usuario;
 import org.kie.api.KieServices;
@@ -23,6 +25,7 @@ public class FiltradoRestaurante {
     private static List<Restaurante> restaurantes;
     private static ModeloNubi modelo;
     private static List<Candidato> candidatos;
+    private static Ruta ruta;
 
     public static List<Candidato> EjecutarReglasRestaurante(String usuario) {
         ks = KieServices.Factory.get();
@@ -33,9 +36,9 @@ public class FiltradoRestaurante {
         restaurantes=modelo.buscarRestaurantes();
         candidatos= new ArrayList<Candidato>();
             for (int i = 0; i < restaurantes.size(); i++) {
-
+                ruta= Mapzen.ObtenerMapa(usu.getLocalizacion().getLatitud(),usu.getLocalizacion().getLongitud(),restaurantes.get(i).getLocalizacion().getLatitud(),restaurantes.get(i).getLocalizacion().getLongitud());
                 candidatos.add(new Candidato());
-                candidatos.get(i).setDistancia(15);
+                candidatos.get(i).setDistancia(ruta.getDistancia());
                 candidatos.get(i).setUsuario(usu);
                 candidatos.get(i).setRestaurante(restaurantes.get(i));
                 candidatos.get(i).setPuntaje(0);

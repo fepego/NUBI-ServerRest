@@ -10,7 +10,7 @@ rule "Regla por distancia más corta exacta fotocopiadoras"
         c: Candidato(distancia <= usuario.preferencias.distancia)
     then
         c.setPuntaje(c.getPuntaje()+1);
-        System.out.println("se agregó un punto por distancia "+c.getRestaurante().getNombre());
+        System.out.println("se agregó un punto por distancia "+c.getFotocopiadora().getNombre());
 end
 rule "Regla por distancia más corta con tolerancia fotocopiadoras"
     when
@@ -20,39 +20,39 @@ rule "Regla por distancia más corta con tolerancia fotocopiadoras"
         System.out.println("se agregó 0.5 por distancia + tolerancia");
 end
 //Conjunto reglas de Disponibilidad
-rule "Regla por Disponibilidad en estado baja"
+rule "Regla por Disponibilidad fotocopiadoras  estado baja"
     when
-        c: Candidato(restaurante.estado.disponibilidad < 0.5 && usuario.preferencias.disponibilidad=="Libre" ||
+        c: Candidato(fotocopiadora.estado.disponibilidad < 0.5 && usuario.preferencias.disponibilidad=="Libre" ||
         usuario.preferencias.disponibilidad=="Media" || usuario.preferencias.disponibilidad=="Cualquiera" )
     then
         c.setPuntaje(c.getPuntaje()+1);
         System.out.println("se agregó 1 por disponibilidad");
 end
-rule "Regla por Disponibilidad en estado medio y usuario con preferencia a libre"
+rule "Regla por Disponibilidad fotocopiadoras en estado medio y usuario con preferencia a libre"
     when
-        c: Candidato(restaurante.estado.disponibilidad == 0.5 && usuario.preferencias.disponibilidad=="Libre")
+        c: Candidato(fotocopiadora.estado.disponibilidad == 0.5 && usuario.preferencias.disponibilidad=="Libre")
     then
         c.setPuntaje(c.getPuntaje()+0.5);
         System.out.println("se agregó 0.5 por disponibilidad ");
 end
-rule "Regla por Disponibilidad en estado medio y usuario con preferencia a Media/Cualquiera"
+rule "Regla por Disponibilidad fotocopiadoras en estado medio y usuario con preferencia a Media/Cualquiera"
     when
-        c: Candidato(restaurante.estado.disponibilidad == 0.5 && usuario.preferencias.disponibilidad=="Media" ||
+        c: Candidato(fotocopiadora.estado.disponibilidad == 0.5 && usuario.preferencias.disponibilidad=="Media" ||
         usuario.preferencias.disponibilidad=="Cualquiera")
     then
         c.setPuntaje(c.getPuntaje()+1);
         System.out.println("se agregó 1 por disponibilidad");
 end
-rule "Regla por Disponibilidad en estado LLeno y usuario con preferencia a Media"
+rule "Regla por Disponibilidad fotocopiadoras en estado LLeno y usuario con preferencia a Media"
     when
-        c: Candidato(restaurante.estado.disponibilidad > 0.5 && usuario.preferencias.disponibilidad=="Media" )
+        c: Candidato(fotocopiadora.estado.disponibilidad > 0.5 && usuario.preferencias.disponibilidad=="Media" )
     then
         c.setPuntaje(c.getPuntaje()+0.5);
         System.out.println("se agregó 0.5 por disponibilidad");
 end
-rule "Regla por Disponibilidad en estado LLeno y usuario con preferencia a Cualquiera"
+rule "Regla por Disponibilidad fotocopiadoras en estado LLeno y usuario con preferencia a Cualquiera"
     when
-        c: Candidato(restaurante.estado.disponibilidad > 0.5 && usuario.preferencias.disponibilidad=="Cualquiera" )
+        c: Candidato(fotocopiadora.estado.disponibilidad > 0.5 && usuario.preferencias.disponibilidad=="Cualquiera" )
     then
         c.setPuntaje(c.getPuntaje()+1);
         System.out.println("se agregó 1 por disponibilidad");
@@ -66,7 +66,7 @@ rule "Regla para establecer el tipo de atención Autoservicio"
 end
 rule "Regla para establecer el tipo de atención Punto de atención"
     when
-        c: Candidato(fotocopiadora.autoServicio==true && usuario.preferencias.servicioFotocopias=="Punto de Atención")
+        c: Candidato(fotocopiadora.autoServicio==false && usuario.preferencias.servicioFotocopias=="Punto de Atención")
     then
-        c.setPuntaje(c.getPuntaje()+2);
+        c.setPuntaje(c.getPuntaje()+1);
 end

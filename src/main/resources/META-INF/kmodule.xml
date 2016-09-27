@@ -3,6 +3,9 @@
     <kbase name="Todas" packages="rules.Alimentacion">
         <ksession name="rRest" type="stateless"/>
     </kbase>
+    <kbase name="Reglas-fotocopiadoras" packages="rules.Fotocopiadoras">
+        <ksession name="RFotocopiadora" type="stateless"/>
+    </kbase>
     <kbase name="ReglasSitio" packages="rules.sitios">
         <ksession name="sitio" type="stateless"/>
     </kbase>

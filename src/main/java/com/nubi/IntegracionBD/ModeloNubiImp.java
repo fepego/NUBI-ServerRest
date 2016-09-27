@@ -238,6 +238,19 @@ public class ModeloNubiImp implements ModeloNubi {
         return ds.createQuery(Restaurante.class).asList();
 
     }
+    public  List<Fotocopiadora> buscarFotocopiadoras()
+    {
+
+        return ds.createQuery(Fotocopiadora.class).asList();
+
+    }
+    public void agregarFotocopiadora(Fotocopiadora ft)
+    {
+        if(ft!=null)
+        {
+            ds.save(ft);
+        }
+    }
    /*
     public static void buscarUsuario()
     {

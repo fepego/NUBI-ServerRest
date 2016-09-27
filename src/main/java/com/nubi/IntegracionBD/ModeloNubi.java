@@ -25,5 +25,7 @@ public interface ModeloNubi {
     public Usuario buscarUsuario(String usuario);
     public void actualizarLocUsuario(String nombre, double latitud, double longitud);
     public List<Restaurante> buscarRestaurantes();
+    public  List<Fotocopiadora> buscarFotocopiadoras();
+    public void agregarFotocopiadora(Fotocopiadora ft);
 
 }
