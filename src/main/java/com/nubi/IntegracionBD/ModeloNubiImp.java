@@ -4,6 +4,7 @@ import com.mongodb.MongoClient;
 import com.nubi.ModuloAdaptacion.resultadoHistorico;
 import com.nubi.Utils.Calculador;
 import com.nubi.colecciones.*;
+import org.bson.Document;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.aggregation.Accumulator;
@@ -214,11 +215,11 @@ public class ModeloNubiImp implements ModeloNubi {
     }
     public Usuario buscarUsuario(String usuario)
     {
-        Usuario u = ds.createQuery(Usuario.class).field("_id").equal(usuario).asList().get(0);
+        List <Usuario> u = ds.createQuery(Usuario.class).field("_id").equal(usuario).asList();
 
-        if(u!=null)
+        if(u.size()>0)
         {
-            return u;
+            return u.get(0);
         }
         return null;
     }
@@ -250,6 +251,18 @@ public class ModeloNubiImp implements ModeloNubi {
         {
             ds.save(ft);
         }
+    }
+    public void agregarusuario (Usuario u)
+    {
+        if(u!=null)
+        {
+            ds.save(u);
+        }
+    }
+    public List<Usuario> validarLogin(String usuario, String pass)
+    {
+        return ds.createQuery(Usuario.class).field("_id").equal(usuario)
+                .field("password").equal(pass).asList();
     }
    /*
     public static void buscarUsuario()

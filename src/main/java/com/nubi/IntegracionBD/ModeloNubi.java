@@ -3,6 +3,7 @@ package com.nubi.IntegracionBD;
 
 import com.nubi.ModuloAdaptacion.resultadoHistorico;
 import com.nubi.colecciones.*;
+import org.bson.Document;
 
 import java.util.Iterator;
 import java.util.List;
@@ -27,5 +28,8 @@ public interface ModeloNubi {
     public List<Restaurante> buscarRestaurantes();
     public  List<Fotocopiadora> buscarFotocopiadoras();
     public void agregarFotocopiadora(Fotocopiadora ft);
+    public void agregarusuario (Usuario u);
+    public List<Usuario> validarLogin(String usuario, String pass);
+
 
 }

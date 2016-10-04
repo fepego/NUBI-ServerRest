@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="nubi">
+    <output-path>$PROJECT_DIR$/out/artifacts/NUBI_REST0_3_war_exploded.war</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="NUBI-REST0.3/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="NUBI-REST0.3" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

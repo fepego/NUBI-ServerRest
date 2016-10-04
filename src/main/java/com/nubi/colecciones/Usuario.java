@@ -25,6 +25,12 @@ public class Usuario {
     @Reference
     private List<SitiosEstudio> favoritosEst= new ArrayList<SitiosEstudio>();
 
+    public Usuario(String idUsuario, String password) {
+        this.idUsuario = idUsuario;
+        this.password = password;
+        favoritosEst= new ArrayList<SitiosEstudio>();
+    }
+
     public Usuario() {
     }
 
