@@ -23,27 +23,45 @@ public class Usuario {
     @Embedded
     private Restriccion restricciones;
     @Reference
-    private List<SitiosEstudio> favoritosEst= new ArrayList<SitiosEstudio>();
+    private List<SitiosEstudio> favoritosEstudio;
+    @Reference
+    private List<Restaurante> favoritosRestaurantes;
+    @Reference
+    private List<Fotocopiadora> favoritosFotocopiadoras;
+    @Reference
+    private List<Usuario> listaContactos;
 
     public Usuario(String idUsuario, String password) {
         this.idUsuario = idUsuario;
         this.password = password;
-        favoritosEst= new ArrayList<SitiosEstudio>();
+        favoritosEstudio= new ArrayList<SitiosEstudio>();
+        favoritosFotocopiadoras= new ArrayList<Fotocopiadora>();
+        favoritosRestaurantes= new ArrayList<Restaurante>();
+        listaContactos= new ArrayList<Usuario>();
     }
 
     public Usuario() {
+        favoritosEstudio= new ArrayList<SitiosEstudio>();
+        favoritosFotocopiadoras= new ArrayList<Fotocopiadora>();
+        favoritosRestaurantes= new ArrayList<Restaurante>();
+        listaContactos= new ArrayList<Usuario>();
+
     }
 
     public Usuario(String idUsuario, String carrera, String password,
-                   Localizacion localizacion, Preferencia preferencias,
-                   Restriccion restricciones, List<SitiosEstudio> favoritosEst) {
+                   Localizacion localizacion, Preferencia preferencias, Restriccion restricciones,
+                   List<SitiosEstudio> favoritosEstudio, List<Restaurante> favoritosRestaurantes,
+                   List<Fotocopiadora> favoritosFotocopiadoras, List<Usuario> listaContactos) {
         this.idUsuario = idUsuario;
         this.carrera = carrera;
         this.password = password;
         this.localizacion = localizacion;
         this.preferencias = preferencias;
         this.restricciones = restricciones;
-        this.favoritosEst = favoritosEst;
+        this.favoritosEstudio = favoritosEstudio;
+        this.favoritosRestaurantes = favoritosRestaurantes;
+        this.favoritosFotocopiadoras = favoritosFotocopiadoras;
+        this.listaContactos = listaContactos;
     }
 
     public String getIdUsuario() {
@@ -94,12 +112,36 @@ public class Usuario {
         this.restricciones = restricciones;
     }
 
-    public List<SitiosEstudio> getFavoritosEst() {
-        return favoritosEst;
+    public List<SitiosEstudio> getFavoritosEstudio() {
+        return favoritosEstudio;
     }
 
-    public void setFavoritosEst(List<SitiosEstudio> favoritosEst) {
-        this.favoritosEst = favoritosEst;
+    public void setFavoritosEstudio(List<SitiosEstudio> favoritosEstudio) {
+        this.favoritosEstudio = favoritosEstudio;
+    }
+
+    public List<Restaurante> getFavoritosRestaurantes() {
+        return favoritosRestaurantes;
+    }
+
+    public void setFavoritosRestaurantes(List<Restaurante> favoritosRestaurantes) {
+        this.favoritosRestaurantes = favoritosRestaurantes;
+    }
+
+    public List<Fotocopiadora> getFavoritosFotocopiadoras() {
+        return favoritosFotocopiadoras;
+    }
+
+    public void setFavoritosFotocopiadoras(List<Fotocopiadora> favoritosFotocopiadoras) {
+        this.favoritosFotocopiadoras = favoritosFotocopiadoras;
+    }
+
+    public List<Usuario> getListaContactos() {
+        return listaContactos;
+    }
+
+    public void setListaContactos(List<Usuario> listaContactos) {
+        this.listaContactos = listaContactos;
     }
 
     @Override
@@ -111,7 +153,10 @@ public class Usuario {
                 ", localizacion=" + localizacion +
                 ", preferencias=" + preferencias +
                 ", restricciones=" + restricciones +
-                ", favoritosEst=" + favoritosEst +
+                ", favoritosEstudio=" + favoritosEstudio +
+                ", favoritosRestaurantes=" + favoritosRestaurantes +
+                ", favoritosFotocopiadoras=" + favoritosFotocopiadoras +
+                ", listaContactos=" + listaContactos +
                 '}';
     }
 }
