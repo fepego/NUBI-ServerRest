@@ -51,5 +51,41 @@ public interface ModeloNubi {
      */
     public void agregarGrupo(String nombre);
 
+    /**
+     * Método que retorna los comentarios generados asociados a un sitio
+     * @param nombreSitio
+     * @return
+     */
+    public  List<Alerta> consultarAlerta(String nombreSitio);
+
+    /**
+     * Metodo para retornar la disponibilidad de un sitio dado su nombre
+     * @param sitio
+     * @return
+     */
+    public Document disponibilidadSitio(String sitio);
+
+    /**
+     * Metodo para duplicar / eliminar comentario por retroalimentación
+     * @param id
+     * @param tipo
+     */
+    public void retroalimentacionAlerta(String id, boolean tipo);
+
+    /**
+     * Método para agregar o eliminar favorito de la lista de favoritos del usuario
+     * @param usuario
+     * @param sitio
+     */
+    public void agregarFavorito(String usuario, String sitio);
+
+    /**
+     * Método para verificar si el sitio esta en lista de favoritos.
+     * @param usuario
+     * @param sitio
+     * @return
+     */
+    public boolean verificarFavorito(String usuario,String sitio);
+
 
 }

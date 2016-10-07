@@ -2,6 +2,7 @@ package com.nubi.Utils;
 
 import com.nubi.colecciones.Localizacion;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -43,6 +44,16 @@ public class Calculador {
             return true;
         }
         return false;
+    }
+    public static long horaConsulta(int val)
+    {
+        Date fechaDia= new Date();
+        fechaDia.setHours(0);
+        fechaDia.setMinutes(0);
+        fechaDia.setSeconds(0);
+        Date fechaCos= new Date();
+        fechaCos.setMinutes(fechaCos.getMinutes()+val);
+        return  fechaCos.getTime()-fechaDia.getTime();
     }
     public static String diaString(int dia)
     {

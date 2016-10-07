@@ -1,10 +1,12 @@
 package com.nubi.IntegracionBD;
 
 import com.mongodb.MongoClient;
+import com.nubi.ModuloAdaptacion.Sitio;
 import com.nubi.ModuloAdaptacion.resultadoHistorico;
 import com.nubi.Utils.Calculador;
 import com.nubi.colecciones.*;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.aggregation.Accumulator;
@@ -109,9 +111,9 @@ public class ModeloNubiImp implements ModeloNubi {
         SitiosEstudio s= new SitiosEstudio();
         s.setNombre(nombreSitio);
         Iterator <Alerta> alertas= ds.createQuery(Alerta.class).field("estado").equal(estado)
-                .field("sitioEst").equal(s)
-                .field("horaPublicacion").greaterThan(horamin)
-                .field("horaPublicacion").lessThan(horamax).iterator();
+            .field("sitioEst").equal(s)
+            .field("horaPublicacion").greaterThan(horamin)
+            .field("horaPublicacion").lessThan(horamax).iterator();
         if(alertas.hasNext())
         {
             return alertas;
@@ -285,6 +287,198 @@ public class ModeloNubiImp implements ModeloNubi {
         grupo.setIdUsuario(nombre);
         grupo.setTipoUsuario("grupo");
         ds.save(grupo);
+    }
+    public  List<Alerta> consultarAlerta(String nombreSitio)
+    {
+        long horaini=Calculador.horaConsulta(-15);
+        long horafin=Calculador.horaConsulta(15);
+        SitiosEstudio est=new SitiosEstudio();
+        est.setNombre(nombreSitio);
+        List<Alerta> alertas= ds.createQuery(Alerta.class)
+            .field("sitioEst").equal(est)
+            .field("horaPublicacion").greaterThan(horaini)
+            .field("horaPublicacion").lessThan(horafin).asList();
+        if(alertas.size()==0)
+        {
+            Restaurante res= new Restaurante();
+            res.setNombre(nombreSitio);
+            alertas= ds.createQuery(Alerta.class)
+                    .field("restaurante").equal(res)
+                    .field("horaPublicacion").greaterThan(horaini)
+                    .field("horaPublicacion").lessThan(horafin).asList();
+            if(alertas.size()==0)
+            {
+                Fotocopiadora fot= new Fotocopiadora();
+                fot.setNombre(nombreSitio);
+                alertas= ds.createQuery(Alerta.class)
+                        .field("fotocopiadora").equal(fot)
+                        .field("horaPublicacion").greaterThan(horaini)
+                        .field("horaPublicacion").lessThan(horafin).asList();
+                if(alertas.size()==0)
+                {
+                    return null;
+                }
+            }
+            return alertas;
+        }
+        return alertas;
+    }
+    public Document disponibilidadSitio(String sitio)
+    {
+        SitiosEstudio st= new SitiosEstudio();
+        st.setNombre(sitio);
+        List <SitiosEstudio> sitiosEst=ds.createQuery(SitiosEstudio.class).field("_id").equal(sitio).asList();
+        List <Restaurante> restaurantes= ds.createQuery(Restaurante.class).field("_id").equal(sitio).asList();
+        List <Fotocopiadora> fotocopiadora= ds.createQuery(Fotocopiadora.class).field("_id").equal(sitio).asList();
+        if(sitiosEst.size()>0)
+        {
+            return new Document("disponibilidad",sitiosEst.get(0).getEstado().getDisponibilidad());
+        }
+        if(restaurantes.size()>0)
+        {
+            return new Document("disponibilidad",restaurantes.get(0).getEstado().getDisponibilidad());
+        }
+        if(fotocopiadora.size()>0)
+        {
+            return new Document("disponibilidad",fotocopiadora.get(0).getEstado().getDisponibilidad());
+        }
+        return null;
+    }
+    public void retroalimentacionAlerta(String id, boolean tipo)
+    {
+        ObjectId oid=new ObjectId(id);
+        Alerta alertas=ds.find(Alerta.class).field("_id").equal(oid).get();
+        System.out.println("entro"+alertas.toString());
+        if(tipo && alertas!=null)
+        {
+            System.out.println("entro");
+            if(alertas.getSitioEst()!=null)
+            {
+                Alerta alt=new Alerta(new Date(),Calculador.horaConsulta(0),alertas.getEstado(),alertas.getSitioEst());
+                agregarAlerta(alt);
+            }
+            if(alertas.getFotocopiadora()!=null)
+            {
+                Alerta alt=new Alerta(new Date(),Calculador.horaConsulta(0),alertas.getEstado(),alertas.getFotocopiadora());
+                agregarAlerta(alt);
+            }
+            if(alertas.getRestaurante()!=null)
+            {
+                Alerta alt=new Alerta(new Date(),Calculador.horaConsulta(0),alertas.getEstado(),alertas.getRestaurante());
+                agregarAlerta(alt);
+            }
+        }
+        if(tipo==false  && alertas!=null)
+        {
+            ds.delete(ds.createQuery(Alerta.class).filter("_id",oid));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param usuario
+     * @param sitio
+     */
+    public void agregarFavorito(String usuario, String sitio)
+    {
+        List <SitiosEstudio> sitiosEst=ds.createQuery(SitiosEstudio.class).field("_id").equal(sitio).asList();
+        List <Restaurante> restaurantes= ds.createQuery(Restaurante.class).field("_id").equal(sitio).asList();
+        List <Fotocopiadora> fotocopiadora= ds.createQuery(Fotocopiadora.class).field("_id").equal(sitio).asList();
+        Usuario usr;
+        if(sitiosEst.size()>0)
+        {
+            List <Usuario> lUsr= ds.createQuery(Usuario.class).field("favoritosEstudio").equal(sitiosEst.get(0)).asList();
+            if(lUsr.size()>0)
+            {
+                usr=buscarUsuario(usuario);
+                UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).removeAll("favoritosEstudio",sitiosEst.get(0));
+                ds.update(usr,ops);
+            }
+            else
+            {
+                usr=buscarUsuario(usuario);
+                UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).add("favoritosEstudio",sitiosEst.get(0));
+                ds.update(usr,ops);
+            }
+        }
+        if(restaurantes.size()>0)
+        {
+            List <Usuario> LUsr= ds.createQuery(Usuario.class).field("favoritosRestaurantes").equal(restaurantes.get(0)).asList();
+            if(LUsr.size()>0)
+            {
+                usr=buscarUsuario(usuario);
+                UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).removeAll("favoritosRestaurantes",restaurantes.get(0));
+                ds.update(usr,ops);
+            }
+            else
+            {
+                usr=buscarUsuario(usuario);
+                UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).add("favoritosRestaurantes",restaurantes.get(0));
+                ds.update(usr,ops);
+            }
+        }
+        if(fotocopiadora.size()>0)
+        {
+            List <Usuario> LUsr= ds.createQuery(Usuario.class).field("favoritosFotocopiadoras").equal(fotocopiadora.get(0)).asList();
+            if(LUsr.size()>0)
+            {
+                usr=buscarUsuario(usuario);
+                UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).removeAll("favoritosFotocopiadoras",fotocopiadora.get(0));
+                ds.update(usr,ops);
+            }
+            else
+            {
+                usr=buscarUsuario(usuario);
+                UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).add("favoritosFotocopiadoras",fotocopiadora.get(0));
+                ds.update(usr,ops);
+            }
+        }
+
+    }
+
+    public boolean verificarFavorito(String usuario,String sitio)
+    {
+        List <SitiosEstudio> sitiosEst=ds.createQuery(SitiosEstudio.class).field("_id").equal(sitio).asList();
+        List <Restaurante> restaurantes= ds.createQuery(Restaurante.class).field("_id").equal(sitio).asList();
+        List <Fotocopiadora> fotocopiadora= ds.createQuery(Fotocopiadora.class).field("_id").equal(sitio).asList();
+        Usuario usr;
+        if(sitiosEst.size()>0)
+        {
+            List <Usuario> lUsr= ds.createQuery(Usuario.class).field("favoritosEstudio").equal(sitiosEst.get(0)).asList();
+            if(lUsr.size()>0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if(restaurantes.size()>0)
+        {
+            List <Usuario> LUsr= ds.createQuery(Usuario.class).field("favoritosRestaurantes").equal(restaurantes.get(0)).asList();
+            if(LUsr.size()>0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if(fotocopiadora.size()>0)
+        {
+            List <Usuario> LUsr= ds.createQuery(Usuario.class).field("favoritosFotocopiadoras").equal(fotocopiadora.get(0)).asList();
+            if(LUsr.size()>0)
+            {
+                return true;
+            }
+            else
+            {
+               return false;
+            }
+        }
+        return false;
     }
    /*
     public static void buscarUsuario()
