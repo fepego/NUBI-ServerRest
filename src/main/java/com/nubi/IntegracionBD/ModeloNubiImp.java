@@ -279,6 +279,13 @@ public class ModeloNubiImp implements ModeloNubi {
         UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).set("preferencias",preferencias);
         ds.update(us,ops);
     }
+    public void agregarGrupo(String nombre)
+    {
+        Usuario grupo= new Usuario();
+        grupo.setIdUsuario(nombre);
+        grupo.setTipoUsuario("grupo");
+        ds.save(grupo);
+    }
    /*
     public static void buscarUsuario()
     {

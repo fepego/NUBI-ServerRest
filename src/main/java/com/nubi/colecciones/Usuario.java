@@ -19,6 +19,7 @@ public class Usuario {
     private String idUsuario;
     private String carrera;
     private String password;
+    private String tipoUsuario;
     @Embedded
     private Localizacion localizacion;
     @Embedded
@@ -37,6 +38,7 @@ public class Usuario {
     public Usuario(String idUsuario, String password) {
         this.idUsuario = idUsuario;
         this.password = password;
+        this.tipoUsuario="usuario";
         favoritosEstudio= new ArrayList<SitiosEstudio>();
         favoritosFotocopiadoras= new ArrayList<Fotocopiadora>();
         favoritosRestaurantes= new ArrayList<Restaurante>();
@@ -46,6 +48,7 @@ public class Usuario {
     }
 
     public Usuario() {
+        localizacion= new Localizacion();
         favoritosEstudio= new ArrayList<SitiosEstudio>();
         favoritosFotocopiadoras= new ArrayList<Fotocopiadora>();
         favoritosRestaurantes= new ArrayList<Restaurante>();
@@ -149,12 +152,21 @@ public class Usuario {
         this.listaContactos = listaContactos;
     }
 
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +
                 "idUsuario='" + idUsuario + '\'' +
                 ", carrera='" + carrera + '\'' +
                 ", password='" + password + '\'' +
+                ", tipoUsuario='" + tipoUsuario + '\'' +
                 ", localizacion=" + localizacion +
                 ", preferencias=" + preferencias +
                 ", restricciones=" + restricciones +

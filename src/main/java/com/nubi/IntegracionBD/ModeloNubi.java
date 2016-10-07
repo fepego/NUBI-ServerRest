@@ -45,5 +45,11 @@ public interface ModeloNubi {
      */
     public void agregarPreferencias(String nombreUsuario, Preferencia preferencias);
 
+    /**
+     * Método para agregar un grupo a BD.
+     * @param nombre
+     */
+    public void agregarGrupo(String nombre);
+
 
 }
