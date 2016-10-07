@@ -31,5 +31,19 @@ public interface ModeloNubi {
     public void agregarusuario (Usuario u);
     public List<Usuario> validarLogin(String usuario, String pass);
 
+    /**
+     * Metodo de modelo para persistir nueva lista de contactos en la base de datos.
+     * @param usuario
+     * @param contacto
+     */
+    public void actualizarListaContactos(String usuario, String contacto);
+
+    /**
+     * Método para agregar o modificar las preferencias dado el nombre de usuario.
+     * @param nombreUsuario
+     * @param preferencias
+     */
+    public void agregarPreferencias(String nombreUsuario, Preferencia preferencias);
+
 
 }

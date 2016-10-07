@@ -2,9 +2,12 @@ package com.nubi.colecciones;
 
 import org.mongodb.morphia.annotations.Entity;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Created by Felipe on 23/08/2016.
  */
+
 @Entity
 public class Preferencia {
 
@@ -31,6 +34,19 @@ public class Preferencia {
         this.distancia = distancia;
         this.frecuenciaNotificacion = frecuenciaNotificacion;
         this.notificaciones = notificaciones;
+        this.toleranciaDist = toleranciaDist;
+        this.toleranciaRuido = toleranciaRuido;
+        this.tipoEspacio = tipoEspacio;
+        this.servicioFotocopias = servicioFotocopias;
+    }
+
+    public Preferencia(double tiempoMinimo, double tiempoMaximo,
+                       String disponibilidad, double distancia, double toleranciaDist,
+                       String toleranciaRuido, String tipoEspacio, String servicioFotocopias) {
+        this.tiempoMinimo = tiempoMinimo;
+        this.tiempoMaximo = tiempoMaximo;
+        Disponibilidad = disponibilidad;
+        this.distancia = distancia;
         this.toleranciaDist = toleranciaDist;
         this.toleranciaRuido = toleranciaRuido;
         this.tipoEspacio = tipoEspacio;

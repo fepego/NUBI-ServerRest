@@ -9,6 +9,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.aggregation.Accumulator;
 import org.mongodb.morphia.aggregation.AggregationPipeline;
+import org.mongodb.morphia.query.UpdateOperations;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
@@ -263,6 +264,20 @@ public class ModeloNubiImp implements ModeloNubi {
     {
         return ds.createQuery(Usuario.class).field("_id").equal(usuario)
                 .field("password").equal(pass).asList();
+    }
+    public void actualizarListaContactos(String usuario, String contacto)
+    {
+        Usuario us=buscarUsuario(usuario);
+
+        UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).add("listaContactos",contacto);
+        ds.update(us,ops);
+
+    }
+    public void agregarPreferencias(String nombreUsuario, Preferencia preferencias)
+    {
+        Usuario us=buscarUsuario(nombreUsuario);
+        UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).set("preferencias",preferencias);
+        ds.update(us,ops);
     }
    /*
     public static void buscarUsuario()

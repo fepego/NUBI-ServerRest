@@ -36,7 +36,7 @@ rule "Regla por Disponibilidad en estado medio y usuario con preferencia a libre
 end
 rule "Regla por Disponibilidad en estado medio y usuario con preferencia a Media/Cualquiera"
     when
-        c: Candidato(restaurante.estado.disponibilidad == 0.5 && usuario.preferencias.disponibilidad=="Media" ||
+        c: Candidato(restaurante.estado.disponibilidad == 0.5 && usuario.preferencias.disponibilidad=="Medio" ||
         usuario.preferencias.disponibilidad=="Cualquiera")
     then
         c.setPuntaje(c.getPuntaje()+1);
@@ -44,7 +44,7 @@ rule "Regla por Disponibilidad en estado medio y usuario con preferencia a Media
 end
 rule "Regla por Disponibilidad en estado LLeno y usuario con preferencia a Media"
     when
-        c: Candidato(restaurante.estado.disponibilidad > 0.5 && usuario.preferencias.disponibilidad=="Media" )
+        c: Candidato(restaurante.estado.disponibilidad > 0.5 && usuario.preferencias.disponibilidad=="Medio" )
     then
         c.setPuntaje(c.getPuntaje()+0.5);
         System.out.println("se agregó 0.5 por disponibilidad");

@@ -21,17 +21,17 @@ dialect  "mvel"
          c.setPuntaje(c.getPuntaje()+0.5);
          System.out.println("se agregó 0.5 por disponibilidad ");
  end
- rule "Regla por Disponibilidad sitio estudio en estado medio y usuario con preferencia a Media/Cualquiera"
+ rule "Regla por Disponibilidad sitio estudio en estado medio y usuario con preferencia a Medio/Cualquiera"
      when
-         c: Candidato(sitio.estado.disponibilidad == 0.5 && usuario.preferencias.disponibilidad=="Media" ||
+         c: Candidato(sitio.estado.disponibilidad == 0.5 && usuario.preferencias.disponibilidad=="Medio" ||
          usuario.preferencias.disponibilidad=="Cualquiera")
      then
          c.setPuntaje(c.getPuntaje()+1);
          System.out.println("se agregó 1 por disponibilidad");
  end
- rule "Regla por Disponibilidad sitio estudio en estado LLeno y usuario con preferencia a Media"
+ rule "Regla por Disponibilidad sitio estudio en estado LLeno y usuario con preferencia a Medio"
      when
-         c: Candidato(sitio.estado.disponibilidad > 0.5 && usuario.preferencias.disponibilidad=="Media" )
+         c: Candidato(sitio.estado.disponibilidad > 0.5 && usuario.preferencias.disponibilidad=="Medio" )
      then
          c.setPuntaje(c.getPuntaje()+0.5);
          System.out.println("se agregó 0.5 por disponibilidad");

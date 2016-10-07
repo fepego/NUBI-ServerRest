@@ -60,4 +60,23 @@ public class Calculador {
             return "sabado";
         return null;
     }
+    public static double distancia(String distancia)
+    {
+        if(distancia.equalsIgnoreCase("poco")){
+            return 30;
+        }
+        if(distancia.equalsIgnoreCase("Medio")){
+            return 70;
+        }
+        if(distancia.equalsIgnoreCase("Moderado")){
+            return 150;
+        }
+        if(distancia.equalsIgnoreCase("Alto")){
+            return 250;
+        }
+        if(distancia.equalsIgnoreCase("sin limite")){
+            return 900;
+        }
+        return 200;
+    }
 }

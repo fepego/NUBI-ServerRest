@@ -1,7 +1,10 @@
 package com.nubi.colecciones;
 
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.mongodb.morphia.annotations.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +31,8 @@ public class Usuario {
     private List<Restaurante> favoritosRestaurantes;
     @Reference
     private List<Fotocopiadora> favoritosFotocopiadoras;
-    @Reference
-    private List<Usuario> listaContactos;
+    @Reference(idOnly = true)
+    private List<String> listaContactos;
 
     public Usuario(String idUsuario, String password) {
         this.idUsuario = idUsuario;
@@ -37,21 +40,23 @@ public class Usuario {
         favoritosEstudio= new ArrayList<SitiosEstudio>();
         favoritosFotocopiadoras= new ArrayList<Fotocopiadora>();
         favoritosRestaurantes= new ArrayList<Restaurante>();
-        listaContactos= new ArrayList<Usuario>();
+        listaContactos= new ArrayList<String>();
+        localizacion=new Localizacion();
+
     }
 
     public Usuario() {
         favoritosEstudio= new ArrayList<SitiosEstudio>();
         favoritosFotocopiadoras= new ArrayList<Fotocopiadora>();
         favoritosRestaurantes= new ArrayList<Restaurante>();
-        listaContactos= new ArrayList<Usuario>();
+        listaContactos= new ArrayList<String>();
 
     }
 
     public Usuario(String idUsuario, String carrera, String password,
                    Localizacion localizacion, Preferencia preferencias, Restriccion restricciones,
                    List<SitiosEstudio> favoritosEstudio, List<Restaurante> favoritosRestaurantes,
-                   List<Fotocopiadora> favoritosFotocopiadoras, List<Usuario> listaContactos) {
+                   List<Fotocopiadora> favoritosFotocopiadoras, List<String> listaContactos) {
         this.idUsuario = idUsuario;
         this.carrera = carrera;
         this.password = password;
@@ -136,11 +141,11 @@ public class Usuario {
         this.favoritosFotocopiadoras = favoritosFotocopiadoras;
     }
 
-    public List<Usuario> getListaContactos() {
+    public List<String> getListaContactos() {
         return listaContactos;
     }
 
-    public void setListaContactos(List<Usuario> listaContactos) {
+    public void setListaContactos(List<String> listaContactos) {
         this.listaContactos = listaContactos;
     }
 
