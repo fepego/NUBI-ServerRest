@@ -330,12 +330,34 @@ public class rsNubi {
         return servicios.verContactos(usuario);
 
     }
+
+    /**
+     * Metodo para eliminar contacto de lista contactos de usuario
+     * @param usuario
+     * @param contacto
+     * @return
+     */
     @GET
     @Path("/eliminar-contacto")
     @Produces("application/json")
-    public Document obtenerContactos(@QueryParam("usuario") String usuario,@QueryParam("contacto") String contacto) {
+    public Document eliminarContactos(@QueryParam("usuario") String usuario,@QueryParam("contacto") String contacto) {
         servicios = new ServiciosNUBIImp();
         return servicios.eliminarContacto(usuario,contacto);
+
+    }
+
+    /**
+     * Método para eliminar grupo de NUBI
+     * @param grupo
+     * @param admin
+     * @return
+     */
+    @GET
+    @Path("/eliminar-grupo")
+    @Produces("application/json")
+    public Document eliminarGrupo(@QueryParam("grupo") String grupo,@QueryParam("admin") String admin) {
+        servicios = new ServiciosNUBIImp();
+        return servicios.eliminarGrupo(grupo,admin);
 
     }
 }

@@ -590,4 +590,14 @@ public class ModeloNubiImp implements ModeloNubi {
         }
         return new Document("eliminacion",false);
     }
+    public Document eliminarGrupo(String nombre, String admin)
+    {
+        Usuario usr=buscarUsuario(nombre);
+        if(usr.getAdministrador().equalsIgnoreCase(admin))
+        {
+            ds.delete(ds.createQuery(Alerta.class).filter("_id",new ObjectId(usr.getIdUsuario())));
+            return new Document("eliminacion",true);
+        }
+        return new Document("eliminacion",false);
+    }
 }

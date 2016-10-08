@@ -123,5 +123,13 @@ public interface ModeloNubi {
      */
     public Document eliminarContacto(String nombre,String contacto);
 
+    /**
+     * Metodo
+     * @param nombre
+     * @param admin
+     * @return
+     */
+    public Document eliminarGrupo(String nombre, String admin);
+
 
 }
