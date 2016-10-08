@@ -20,6 +20,7 @@ public class Usuario {
     private String carrera;
     private String password;
     private String tipoUsuario;
+    private String administrador;
     @Embedded
     private Localizacion localizacion;
     @Embedded
@@ -34,6 +35,7 @@ public class Usuario {
     private List<Fotocopiadora> favoritosFotocopiadoras;
     @Reference(idOnly = true)
     private List<String> listaContactos;
+    private List<String> grupos;
 
     public Usuario(String idUsuario, String password) {
         this.idUsuario = idUsuario;
@@ -44,6 +46,7 @@ public class Usuario {
         favoritosRestaurantes= new ArrayList<Restaurante>();
         listaContactos= new ArrayList<String>();
         localizacion=new Localizacion();
+        grupos= new ArrayList<String>();
 
     }
 
@@ -53,23 +56,20 @@ public class Usuario {
         favoritosFotocopiadoras= new ArrayList<Fotocopiadora>();
         favoritosRestaurantes= new ArrayList<Restaurante>();
         listaContactos= new ArrayList<String>();
+        grupos= new ArrayList<String>();
 
     }
 
-    public Usuario(String idUsuario, String carrera, String password,
-                   Localizacion localizacion, Preferencia preferencias, Restriccion restricciones,
-                   List<SitiosEstudio> favoritosEstudio, List<Restaurante> favoritosRestaurantes,
-                   List<Fotocopiadora> favoritosFotocopiadoras, List<String> listaContactos) {
+
+    public Usuario(String idUsuario, String password, String tipoUsuario) {
         this.idUsuario = idUsuario;
-        this.carrera = carrera;
         this.password = password;
-        this.localizacion = localizacion;
-        this.preferencias = preferencias;
-        this.restricciones = restricciones;
-        this.favoritosEstudio = favoritosEstudio;
-        this.favoritosRestaurantes = favoritosRestaurantes;
-        this.favoritosFotocopiadoras = favoritosFotocopiadoras;
-        this.listaContactos = listaContactos;
+        this.tipoUsuario = tipoUsuario;
+        localizacion= new Localizacion();
+        favoritosEstudio= new ArrayList<SitiosEstudio>();
+        favoritosFotocopiadoras= new ArrayList<Fotocopiadora>();
+        favoritosRestaurantes= new ArrayList<Restaurante>();
+        listaContactos= new ArrayList<String>();
     }
 
     public String getIdUsuario() {
@@ -158,6 +158,22 @@ public class Usuario {
 
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public String getAdministrador() {
+        return administrador;
+    }
+
+    public void setAdministrador(String administrador) {
+        this.administrador = administrador;
+    }
+
+    public List<String> getGrupos() {
+        return grupos;
+    }
+
+    public void setGrupos(List<String> grupos) {
+        this.grupos = grupos;
     }
 
     @Override

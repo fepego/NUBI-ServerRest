@@ -300,11 +300,12 @@ public class ModeloNubiImp implements ModeloNubi {
         UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).set("restricciones",restricciones);
         ds.update(us,ops);
     }
-    public void agregarGrupo(String nombre)
+    public void agregarGrupo(String nombre,String administrador)
     {
         Usuario grupo= new Usuario();
         grupo.setIdUsuario(nombre);
         grupo.setTipoUsuario("grupo");
+        grupo.setAdministrador(administrador);
         ds.save(grupo);
     }
     public  List<Alerta> consultarAlerta(String nombreSitio)
@@ -521,6 +522,44 @@ public class ModeloNubiImp implements ModeloNubi {
         List<Notificacion> notificaciones=ds.createQuery(Notificacion.class).filter("destinatario",usuario).asList();
         if(notificaciones.size()>0)
             return notificaciones;
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param remitente
+     * @return
+     */
+    public List<Notificacion> obtenerNotificacionRemitente(String remitente)
+    {
+        List<Notificacion> notificaciones=ds.createQuery(Notificacion.class).filter("remitente",remitente).asList();
+        if(notificaciones.size()>0)
+            return notificaciones;
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param sitio
+     * @return
+     */
+    public Document obtenerSitio(String sitio)
+    {
+        List <SitiosEstudio> sitiosEst=ds.createQuery(SitiosEstudio.class).field("_id").equal(sitio).asList();
+        List <Restaurante> restaurantes= ds.createQuery(Restaurante.class).field("_id").equal(sitio).asList();
+        List <Fotocopiadora> fotocopiadora= ds.createQuery(Fotocopiadora.class).field("_id").equal(sitio).asList();
+        if(sitiosEst.size()>0)
+            return new Document("sitio",sitiosEst.get(0))
+                    .append("latitud",sitiosEst.get(0).getLocalizacion().getLatitud())
+                    .append("longitud",sitiosEst.get(0).getLocalizacion().getLongitud());
+        if(restaurantes.size()>0)
+            return new Document("sitio",restaurantes.get(0))
+                    .append("latitud",restaurantes.get(0).getLocalizacion().getLatitud())
+                    .append("longitud",restaurantes.get(0).getLocalizacion().getLongitud());
+        if(fotocopiadora.size()>0)
+            return new Document("sitio",fotocopiadora.get(0))
+                    .append("latitud",fotocopiadora.get(0).getLocalizacion().getLatitud())
+                    .append("longitud",fotocopiadora.get(0).getLocalizacion().getLongitud());
         return null;
     }
    /*

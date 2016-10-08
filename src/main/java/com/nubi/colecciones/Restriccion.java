@@ -20,6 +20,11 @@ public class Restriccion {
         this.privacidad = privacidad;
     }
 
+    public Restriccion(boolean movilidad, boolean privacidad) {
+        this.movilidad = movilidad;
+        this.privacidad = privacidad;
+    }
+
     public boolean isMovilidad() {
         return movilidad;
     }

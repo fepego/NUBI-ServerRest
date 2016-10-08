@@ -73,7 +73,7 @@ public class Calculador {
     }
     public static double distancia(String distancia)
     {
-        if(distancia.equalsIgnoreCase("poco")){
+        if(distancia.equalsIgnoreCase("Poco")){
             return 30;
         }
         if(distancia.equalsIgnoreCase("Medio")){
@@ -82,10 +82,10 @@ public class Calculador {
         if(distancia.equalsIgnoreCase("Moderado")){
             return 150;
         }
-        if(distancia.equalsIgnoreCase("Alto")){
+        if(distancia.equalsIgnoreCase("Mucho")){
             return 250;
         }
-        if(distancia.equalsIgnoreCase("sin limite")){
+        if(distancia.equalsIgnoreCase("Sin Limite")){
             return 900;
         }
         return 200;

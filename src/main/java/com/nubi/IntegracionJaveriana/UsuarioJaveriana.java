@@ -20,6 +20,7 @@ public class UsuarioJaveriana {
 
             JSONObject json = JsonReader.readJsonFromUrl("http://www.javeriana.edu.co/JaveMovil/rs/movilservicehornot/gethorariosemanauid?uid="+nombreUsuario);
             String getHorario = json.get("content")+"";
+            System.out.println("usr"+nombreUsuario);
             if(getHorario.length()==2){
                 System.out.println("El usuario NO es estudiante de la PUJ");
                 return false;

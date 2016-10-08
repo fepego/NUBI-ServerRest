@@ -54,7 +54,7 @@ public interface ModeloNubi {
      * Método para agregar un grupo a BD.
      * @param nombre
      */
-    public void agregarGrupo(String nombre);
+    public void agregarGrupo(String nombre,String adminstrador);
 
     /**
      * Método que retorna los comentarios generados asociados a un sitio
@@ -103,6 +103,18 @@ public interface ModeloNubi {
      * @param usuario
      */
     public List<Notificacion> obtenerNotificacion(String usuario);
+    /**
+     * Método para obtener las notificaciones de un usuario-remitente(recupera notificaciones de Remitente)
+     * @param remitente
+     */
+    public List<Notificacion> obtenerNotificacionRemitente(String remitente);
+
+    /**
+     * Método que ayuda a obtener el sitio dado el nombre
+     * @param sitio
+     * @return
+     */
+    public Document obtenerSitio(String sitio);
 
 
 }
