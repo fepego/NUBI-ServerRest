@@ -143,5 +143,32 @@ public interface ModeloNubi {
      */
     public long consultarNotificaciones(String usuario);
 
+    /**
+     * Método para obtener la lista de amigos y sus datos
+     * @param nombre
+     * @return
+     */
+    public List<Usuario> obtenerContactos(String nombre);
+
+    /**
+     * Método para obtener los nombres de los grupos
+     * @param nombre
+     * @return
+     */
+    public List<String> obtenerGrupos(String nombre);
+
+    /**
+     * Metodo para retornar solo lista de contactos tipo usuario
+     * @param nombre
+     * @return
+     */
+    public List<String> obtenerListaContactos(String nombre);
+
+    /**
+     * Metodo para agregar uusarios al grupo y el grupo a lista contactos
+     * @param usuario
+     * @param contacto
+     */
+    public void actualizarListaContactosGrupo(String usuario, String contacto);
 
 }

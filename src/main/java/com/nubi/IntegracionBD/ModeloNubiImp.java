@@ -15,10 +15,7 @@ import org.mongodb.morphia.query.UpdateOperations;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static org.mongodb.morphia.aggregation.Group.grouping;
 import static org.mongodb.morphia.aggregation.Projection.projection;
@@ -626,13 +623,105 @@ public class ModeloNubiImp implements ModeloNubi {
      */
     public long consultarNotificaciones(String usuario)
     {
-        List<Notificacion> notificaciones= ds.createQuery(Notificacion.class).field("destinatario").equal(usuario).asList();
+        List<Notificacion> notificaciones= ds.createQuery(Notificacion.class).field("destinatario").equal(usuario)
+                .field("estadoLectura").equal(false).asList();
         if(notificaciones.size()>0)
         {
             return notificaciones.size();
         }
         return 0;
     }
+    /**
+     * {@inheritDoc}
+     * @param nombre
+     * @return
+     */
+    public List<Usuario> obtenerContactos(String nombre)
+    {
+        List<Usuario> contactos= new ArrayList<Usuario>();
+        Usuario usuario= buscarUsuario(nombre);
+        if(usuario!=null && (usuario.getListaContactos().size()>0 || usuario.getListaContactos()!=null)) {
+            for (String s: usuario.getListaContactos())
+            {
+                List<Usuario> contacto=ds.createQuery(Usuario.class).field("_id").equal(s)
+                        .filter("restricciones.privacidad",true)
+                        .field("tipoUsuario").equal("usuario").asList();
+                if(contacto.size()>0)
+                {
+                    contactos.add(contacto.get(0));
+                }
+            }
+            return contactos;
 
+        }
+        return null;
+    }
 
+    /**
+     * {@inheritDoc}
+     * @param nombre
+     * @return
+     */
+    public List<String> obtenerListaContactos(String nombre)
+    {
+        List<String> contactos= new ArrayList<String>();
+        Usuario usuario= buscarUsuario(nombre);
+        if(usuario!=null && (usuario.getListaContactos().size()>0 || usuario.getListaContactos()!=null)) {
+            for (String s: usuario.getListaContactos())
+            {
+                List<Usuario> contacto=ds.createQuery(Usuario.class).field("_id").equal(s)
+                        .filter("restricciones.privacidad",true)
+                        .field("tipoUsuario").equal("usuario").asList();
+                if(contacto.size()>0)
+                {
+                    contactos.add(contacto.get(0).getIdUsuario());
+                }
+            }
+            return contactos;
+
+        }
+        return null;
+    }
+    /**
+     *{@inheritDoc}
+     * @param nombre
+     * @return
+     */
+    public List<String> obtenerGrupos(String nombre)
+    {
+        List<String> grupos= new ArrayList<String>();
+        Usuario usuario= buscarUsuario(nombre);
+        if(usuario!=null && (usuario.getListaContactos().size()>0 || usuario.getListaContactos()!=null)) {
+            for (String s: usuario.getListaContactos())
+            {
+                List<Usuario> contacto=ds.createQuery(Usuario.class).field("_id").equal(s)
+                        .field("tipoUsuario").equal("grupo").asList();
+                if(contacto.size()>0)
+                {
+                    System.out.println("entro");
+                    grupos.add(contacto.get(0).getIdUsuario());
+                }
+            }
+            return grupos;
+
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param usuario
+     * @param contacto
+     */
+    public void actualizarListaContactosGrupo(String usuario, String contacto)
+    {
+        Usuario us=buscarUsuario(usuario);
+        Usuario contc=buscarUsuario(contacto);
+        UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).add("listaContactos",contacto);
+        UpdateOperations <Usuario> ops2=ds.createUpdateOperations(Usuario.class).add("listaContactos",usuario);
+        ds.update(us,ops);
+        if(contacto!=null)
+            ds.update(contc,ops2);
+
+    }
 }

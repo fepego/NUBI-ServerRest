@@ -153,6 +153,8 @@ public class rsNubi {
     @Produces("application/json")
     public Usuario agregarContacto(@QueryParam("usuario")String nombreUsuario, @QueryParam("contacto") String contacto) {
         servicios = new ServiciosNUBIImp();
+        System.out.println(nombreUsuario);
+        System.out.println(contacto);
         return servicios.agregarContacto(nombreUsuario,contacto);
 
 
@@ -361,12 +363,53 @@ public class rsNubi {
 
     }
 
+    /**
+     * Metodo para retornar contador de notificaciones no leidas.
+     * @param usuario
+     * @return
+     */
     @GET
     @Path("/contar-notificaciones")
     @Produces("application/json")
     public Document contadorNotificaciones(@QueryParam("usuario") String usuario) {
         servicios = new ServiciosNUBIImp();
         return servicios.consultarNumNotificaciones(usuario);
+
+    }
+
+    /**
+     * Metodo para obtener contactos
+     * @param usuario
+     * @return
+     */
+    @GET
+    @Path("/obtener-contactos")
+    @Produces("application/json")
+    public List<Usuario> obtenerInfoContactos(@QueryParam("usuario") String usuario) {
+        servicios = new ServiciosNUBIImp();
+        return servicios.obtenerContactos(usuario);
+
+    }
+
+    /**
+     * Método para obtener los grupos a los  que esta inscrito el usuario
+     * @param usuario
+     * @return
+     */
+    @GET
+    @Path("/obtener-grupos")
+    @Produces("application/json")
+    public List<String> obtenerGrupos(@QueryParam("usuario") String usuario) {
+        servicios = new ServiciosNUBIImp();
+        return servicios.obtenerGrupos(usuario);
+
+    }
+    @GET
+    @Path("/agregar-contactogrupo")
+    @Produces("application/json")
+    public void agregarContactoGrupo(@QueryParam("grupo") String grupo,@QueryParam("usuario") String usuario) {
+        servicios = new ServiciosNUBIImp();
+        servicios.agregarContactoGrupo(grupo,usuario);
 
     }
 }
