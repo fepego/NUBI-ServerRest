@@ -360,4 +360,13 @@ public class rsNubi {
         return servicios.eliminarGrupo(grupo,admin);
 
     }
+
+    @GET
+    @Path("/contar-notificaciones")
+    @Produces("application/json")
+    public Document contadorNotificaciones(@QueryParam("usuario") String usuario) {
+        servicios = new ServiciosNUBIImp();
+        return servicios.consultarNumNotificaciones(usuario);
+
+    }
 }

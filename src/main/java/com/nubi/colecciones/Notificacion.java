@@ -19,6 +19,7 @@ public class Notificacion {
     @Indexed
     private String destinatario;
     private String comentario;
+    private boolean estadoLectura;
 
     public Notificacion() {
     }
@@ -28,6 +29,7 @@ public class Notificacion {
         this.remitente = remitente;
         this.destinatario = destinatario;
         this.comentario = comentario;
+        this.estadoLectura= false;
     }
 
     public String getId() {
@@ -70,6 +72,14 @@ public class Notificacion {
         this.comentario = comentario;
     }
 
+    public boolean isEstadoLectura() {
+        return estadoLectura;
+    }
+
+    public void setEstadoLectura(boolean estadoLectura) {
+        this.estadoLectura = estadoLectura;
+    }
+
     @Override
     public String toString() {
         return "Notificacion{" +
@@ -78,6 +88,7 @@ public class Notificacion {
                 ", remitente='" + remitente + '\'' +
                 ", destinatario='" + destinatario + '\'' +
                 ", comentario='" + comentario + '\'' +
+                ", estadoLectura=" + estadoLectura +
                 '}';
     }
 }

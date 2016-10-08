@@ -590,14 +590,49 @@ public class ModeloNubiImp implements ModeloNubi {
         }
         return new Document("eliminacion",false);
     }
+
+    /**
+     * {@inheritDoc}
+     * @param nombre
+     * @param admin
+     * @return
+     */
     public Document eliminarGrupo(String nombre, String admin)
     {
         Usuario usr=buscarUsuario(nombre);
         if(usr.getAdministrador().equalsIgnoreCase(admin))
         {
-            ds.delete(ds.createQuery(Alerta.class).filter("_id",new ObjectId(usr.getIdUsuario())));
+            ds.findAndDelete(ds.createQuery(Usuario.class).filter("_id",nombre));
             return new Document("eliminacion",true);
         }
         return new Document("eliminacion",false);
     }
+    /**
+     * {@inheritDoc}
+     * @param usuario
+     */
+    public void marcarnotificaciones(String usuario)
+    {
+        List<Notificacion> notificaciones= ds.createQuery(Notificacion.class).field("destinatario").equal(usuario).asList();
+        if(notificaciones.size()>0)
+        {
+            UpdateOperations <Notificacion> ops=ds.createUpdateOperations(Notificacion.class).set("estadoLectura",true);
+            ds.update(ds.createQuery(Notificacion.class).field("destinatario").equal(usuario),ops);
+        }
+    }
+    /**
+     * {@inheritDoc}
+     * @param usuario
+     */
+    public long consultarNotificaciones(String usuario)
+    {
+        List<Notificacion> notificaciones= ds.createQuery(Notificacion.class).field("destinatario").equal(usuario).asList();
+        if(notificaciones.size()>0)
+        {
+            return notificaciones.size();
+        }
+        return 0;
+    }
+
+
 }

@@ -131,5 +131,17 @@ public interface ModeloNubi {
      */
     public Document eliminarGrupo(String nombre, String admin);
 
+    /**
+     * Método para marcar como leidas las notificaciones
+     * @param usuario
+     */
+    public void marcarnotificaciones(String usuario);
+
+    /**
+     * Método para contar notificaciones no leidas
+     * @param usuario
+     */
+    public long consultarNotificaciones(String usuario);
+
 
 }
