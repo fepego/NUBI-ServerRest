@@ -14,6 +14,7 @@ import org.mongodb.morphia.aggregation.AggregationPipeline;
 import org.mongodb.morphia.query.UpdateOperations;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -275,10 +276,28 @@ public class ModeloNubiImp implements ModeloNubi {
         ds.update(us,ops);
 
     }
+
+    /**
+     * {@inheritDoc}
+     * @param nombreUsuario
+     * @param preferencias
+     */
     public void agregarPreferencias(String nombreUsuario, Preferencia preferencias)
     {
         Usuario us=buscarUsuario(nombreUsuario);
         UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).set("preferencias",preferencias);
+        ds.update(us,ops);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param nombreUsuario
+     * @param restricciones
+     */
+    public void agregarRestricciones(String nombreUsuario, Restriccion restricciones)
+    {
+        Usuario us=buscarUsuario(nombreUsuario);
+        UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).set("restricciones",restricciones);
         ds.update(us,ops);
     }
     public void agregarGrupo(String nombre)
@@ -479,6 +498,30 @@ public class ModeloNubiImp implements ModeloNubi {
             }
         }
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param notificacion
+     */
+    public void agregarNotificacion(Notificacion notificacion)
+    {
+        if(notificacion!=null)
+        {
+            ds.save(notificacion);
+        }
+    }
+
+    /**
+     *{@inheritDoc}
+     * @param usuario
+     */
+    public List<Notificacion> obtenerNotificacion(String usuario)
+    {
+        List<Notificacion> notificaciones=ds.createQuery(Notificacion.class).filter("destinatario",usuario).asList();
+        if(notificaciones.size()>0)
+            return notificaciones;
+        return null;
     }
    /*
     public static void buscarUsuario()

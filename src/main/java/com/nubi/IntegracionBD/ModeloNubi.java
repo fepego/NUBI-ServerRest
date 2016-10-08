@@ -44,7 +44,12 @@ public interface ModeloNubi {
      * @param preferencias
      */
     public void agregarPreferencias(String nombreUsuario, Preferencia preferencias);
-
+    /**
+     * Método para agregar o modificar las preferencias dado el nombre de usuario.
+     * @param nombreUsuario
+     * @param restricciones
+     */
+    public void agregarRestricciones(String nombreUsuario, Restriccion restricciones);
     /**
      * Método para agregar un grupo a BD.
      * @param nombre
@@ -86,6 +91,18 @@ public interface ModeloNubi {
      * @return
      */
     public boolean verificarFavorito(String usuario,String sitio);
+
+    /**
+     * Método para agregar una nueva notificación en BD
+     * @param notificacion
+     */
+    public void agregarNotificacion(Notificacion notificacion);
+
+    /**
+     * Método para obtener las notificaciones de un usuario(recupera notificaciones de destinatario)
+     * @param usuario
+     */
+    public List<Notificacion> obtenerNotificacion(String usuario);
 
 
 }
