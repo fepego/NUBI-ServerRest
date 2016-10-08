@@ -189,41 +189,20 @@ public class rsNubi {
     }
 
     /**
-     * Método para agregar una alerta para sitios de estudio
+     *
      * @param sitio
+     * @param comentario
+     * @param estado
      * @return
      */
     @GET
-    @Path("/alerta-sitioest")
+    @Path("/agregar-alerta")
     @Produces("application/json")
-    public Document alertaSitiosEst(@QueryParam("sitio")String sitio,@QueryParam("comentario")String comentario,@QueryParam("estado")String estado ) {
+    public Document agregarAlerta(@QueryParam("sitio")String sitio,@QueryParam("comentario")String comentario,@QueryParam("estado")String estado ) {
         servicios = new ServiciosNUBIImp();
-        return servicios.insertarAlertaSitioEstudio(sitio,comentario,estado);
+        return servicios.agregarAlerta(sitio,comentario,estado);
     }
-    /**
-     * Método para agregar una alerta para restaurante
-     * @param sitio
-     * @return
-     */
-    @GET
-    @Path("/alerta-restaurante")
-    @Produces("application/json")
-    public Document alertaRestaurante(@QueryParam("sitio")String sitio,@QueryParam("comentario")String comentario,@QueryParam("estado")String estado ) {
-        servicios = new ServiciosNUBIImp();
-        return servicios.insertarAlertaRestaurante(sitio,comentario,estado);
-    }
-    /**
-     * Método para agregar una alerta para fotocopiadora
-     * @param sitio
-     * @return
-     */
-    @GET
-    @Path("/alerta-fotocopiadora")
-    @Produces("application/json")
-    public Document alertaFotocopiadora(@QueryParam("sitio")String sitio,@QueryParam("comentario")String comentario,@QueryParam("estado")String estado ) {
-        servicios = new ServiciosNUBIImp();
-        return servicios.insertarAlertaFotocopiadora(sitio,comentario,estado);
-    }
+
     @GET
     @Path("/disponibilidad")
     @Produces("application/json")
@@ -321,12 +300,42 @@ public class rsNubi {
         return servicios.obtenerNotificacionesRemitente(usuario);
 
     }
+
+    /**
+     * metodo para recuperar notificaciones de remitente
+     * @param latitud
+     * @param longitud
+     * @param sitio
+     * @return
+     */
     @GET
     @Path("/consultar-ruta")
     @Produces("application/json")
     public Ruta obtenerNotificacionRemitente(@QueryParam("latitud") double latitud, @QueryParam("longitud") double longitud, @QueryParam("sitio") String sitio) {
         servicios = new ServiciosNUBIImp();
         return servicios.obtenerRuta(latitud,longitud,sitio);
+
+    }
+
+    /**
+     * método para recuperar la lista de contactos
+     * @param usuario
+     * @return
+     */
+    @GET
+    @Path("/consultar-listacontactos")
+    @Produces("application/json")
+    public List<String> obtenerContactos(@QueryParam("usuario") String usuario) {
+        servicios = new ServiciosNUBIImp();
+        return servicios.verContactos(usuario);
+
+    }
+    @GET
+    @Path("/eliminar-contacto")
+    @Produces("application/json")
+    public Document obtenerContactos(@QueryParam("usuario") String usuario,@QueryParam("contacto") String contacto) {
+        servicios = new ServiciosNUBIImp();
+        return servicios.eliminarContacto(usuario,contacto);
 
     }
 }

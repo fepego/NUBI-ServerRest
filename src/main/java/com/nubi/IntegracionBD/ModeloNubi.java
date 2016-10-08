@@ -116,5 +116,12 @@ public interface ModeloNubi {
      */
     public Document obtenerSitio(String sitio);
 
+    /**
+     * Método para eliminar un contacto
+     * @param nombre
+     * @return
+     */
+    public Document eliminarContacto(String nombre,String contacto);
+
 
 }

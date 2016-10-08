@@ -407,7 +407,8 @@ public class ModeloNubiImp implements ModeloNubi {
         Usuario usr;
         if(sitiosEst.size()>0)
         {
-            List <Usuario> lUsr= ds.createQuery(Usuario.class).field("favoritosEstudio").equal(sitiosEst.get(0)).asList();
+            List <Usuario> lUsr= ds.createQuery(Usuario.class).field("_id").equal(usuario)
+                    .field("favoritosEstudio").equal(sitiosEst.get(0)).asList();
             if(lUsr.size()>0)
             {
                 usr=buscarUsuario(usuario);
@@ -423,7 +424,8 @@ public class ModeloNubiImp implements ModeloNubi {
         }
         if(restaurantes.size()>0)
         {
-            List <Usuario> LUsr= ds.createQuery(Usuario.class).field("favoritosRestaurantes").equal(restaurantes.get(0)).asList();
+            List <Usuario> LUsr= ds.createQuery(Usuario.class).field("_id").equal(usuario)
+                    .field("favoritosRestaurantes").equal(restaurantes.get(0)).asList();
             if(LUsr.size()>0)
             {
                 usr=buscarUsuario(usuario);
@@ -439,7 +441,8 @@ public class ModeloNubiImp implements ModeloNubi {
         }
         if(fotocopiadora.size()>0)
         {
-            List <Usuario> LUsr= ds.createQuery(Usuario.class).field("favoritosFotocopiadoras").equal(fotocopiadora.get(0)).asList();
+            List <Usuario> LUsr= ds.createQuery(Usuario.class).field("_id").equal(usuario)
+                    .field("favoritosFotocopiadoras").equal(fotocopiadora.get(0)).asList();
             if(LUsr.size()>0)
             {
                 usr=buscarUsuario(usuario);
@@ -464,7 +467,8 @@ public class ModeloNubiImp implements ModeloNubi {
         Usuario usr;
         if(sitiosEst.size()>0)
         {
-            List <Usuario> lUsr= ds.createQuery(Usuario.class).field("favoritosEstudio").equal(sitiosEst.get(0)).asList();
+            List <Usuario> lUsr= ds.createQuery(Usuario.class).field("_id").equal(usuario)
+                    .field("favoritosEstudio").equal(sitiosEst.get(0)).asList();
             if(lUsr.size()>0)
             {
                 return true;
@@ -476,7 +480,8 @@ public class ModeloNubiImp implements ModeloNubi {
         }
         if(restaurantes.size()>0)
         {
-            List <Usuario> LUsr= ds.createQuery(Usuario.class).field("favoritosRestaurantes").equal(restaurantes.get(0)).asList();
+            List <Usuario> LUsr= ds.createQuery(Usuario.class).field("_id").equal(usuario)
+                    .field("favoritosRestaurantes").equal(restaurantes.get(0)).asList();
             if(LUsr.size()>0)
             {
                 return true;
@@ -488,7 +493,8 @@ public class ModeloNubiImp implements ModeloNubi {
         }
         if(fotocopiadora.size()>0)
         {
-            List <Usuario> LUsr= ds.createQuery(Usuario.class).field("favoritosFotocopiadoras").equal(fotocopiadora.get(0)).asList();
+            List <Usuario> LUsr= ds.createQuery(Usuario.class).field("_id").equal(usuario)
+                    .field("favoritosFotocopiadoras").equal(fotocopiadora.get(0)).asList();
             if(LUsr.size()>0)
             {
                 return true;
@@ -551,42 +557,37 @@ public class ModeloNubiImp implements ModeloNubi {
         if(sitiosEst.size()>0)
             return new Document("sitio",sitiosEst.get(0))
                     .append("latitud",sitiosEst.get(0).getLocalizacion().getLatitud())
-                    .append("longitud",sitiosEst.get(0).getLocalizacion().getLongitud());
+                    .append("longitud",sitiosEst.get(0).getLocalizacion().getLongitud())
+                    .append("tipoServicio","sitioEstudio");
         if(restaurantes.size()>0)
             return new Document("sitio",restaurantes.get(0))
                     .append("latitud",restaurantes.get(0).getLocalizacion().getLatitud())
-                    .append("longitud",restaurantes.get(0).getLocalizacion().getLongitud());
+                    .append("longitud",restaurantes.get(0).getLocalizacion().getLongitud())
+                    .append("tipoServicio","restaurantes");
         if(fotocopiadora.size()>0)
             return new Document("sitio",fotocopiadora.get(0))
                     .append("latitud",fotocopiadora.get(0).getLocalizacion().getLatitud())
-                    .append("longitud",fotocopiadora.get(0).getLocalizacion().getLongitud());
+                    .append("longitud",fotocopiadora.get(0).getLocalizacion().getLongitud())
+                    .append("tipoServicio","fotocopiadoras") ;
         return null;
     }
-   /*
-    public static void buscarUsuario()
+
+    /**
+     * {@inheritDoc}
+     * @param nombre
+     * @param contacto
+     * @return
+     */
+    public Document eliminarContacto(String nombre,String contacto)
     {
-        Query<Usuario> qry= ds.createQuery(Usuario.class);
-
-        usu=ds.find(qry.getEntityClass()).asList();
-
+        Usuario usr=buscarUsuario(nombre);
+        Usuario usrCont=buscarUsuario(contacto);
+        if(usr!=null && usrCont!=null)
+        {
+            UpdateOperations <Usuario> ops=ds.createUpdateOperations(Usuario.class).removeAll("listaContactos",contacto);
+            ds.update(usr,ops);
+            return new Document("eliminacion",true);
+        }
+        return new Document("eliminacion",false);
     }
-
-
-    public static void actualizar()
-    {
-        Date fecha= new Date();
-        Query<SitiosEstudio> qry= ds.createQuery(SitiosEstudio.class);
-        sts= ds.find(qry.getEntityClass()).asList();
-
-        GregorianCalendar cini= new GregorianCalendar(1971,0,1,0,0);
-        GregorianCalendar c1= new GregorianCalendar(1971,0,1,18,0);
-        GregorianCalendar c2= new GregorianCalendar(1971,0,1,20,0);
-        long ini= c1.getTimeInMillis()-cini.getTimeInMillis();
-        long fin= c2.getTimeInMillis()-cini.getTimeInMillis();
-        Semilla sm= new Semilla(ini,fin,0.2,"Normal","lunes");
-        sts.get(0).getSemilla().add(sm);
-        ds.save(sts);
-
-    }
-    */
 }
