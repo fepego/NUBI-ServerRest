@@ -171,4 +171,11 @@ public interface ModeloNubi {
      */
     public void actualizarListaContactosGrupo(String usuario, String contacto);
 
+    /**
+     * Método para obtener la entidad de cada integrante del grupo.
+     * @param grupo
+     * @return
+     */
+    public List<Usuario> obtenerIntegrantes(String grupo);
+
 }

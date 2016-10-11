@@ -4,6 +4,7 @@ import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,16 +20,23 @@ public class Fotocopiadora {
     private Estado estado;
     @Embedded
     private List<Comentario> comentarios;
+    private boolean accesoCondicion;
+    @Embedded
+    private List<Semilla> semilla;
     public Fotocopiadora() {
+        comentarios= new ArrayList<Comentario>();
+        semilla= new ArrayList<Semilla>();
     }
 
     public Fotocopiadora(String nombre, Localizacion localizacion,
-                         boolean autoServicio, Estado estado, List<Comentario> comentarios) {
+                         boolean autoServicio, Estado estado, List<Comentario> comentarios, boolean accesoCondicion, List<Semilla> semilla) {
         this.nombre = nombre;
         this.localizacion = localizacion;
         this.autoServicio = autoServicio;
         this.estado = estado;
         this.comentarios = comentarios;
+        this.accesoCondicion = accesoCondicion;
+        this.semilla = semilla;
     }
 
     public String getNombre() {
@@ -71,6 +79,22 @@ public class Fotocopiadora {
         this.comentarios = comentarios;
     }
 
+    public boolean isAccesoCondicion() {
+        return accesoCondicion;
+    }
+
+    public void setAccesoCondicion(boolean accesoCondicion) {
+        this.accesoCondicion = accesoCondicion;
+    }
+
+    public List<Semilla> getSemilla() {
+        return semilla;
+    }
+
+    public void setSemilla(List<Semilla> semilla) {
+        this.semilla = semilla;
+    }
+
     @Override
     public String toString() {
         return "Fotocopiadora{" +
@@ -79,6 +103,8 @@ public class Fotocopiadora {
                 ", autoServicio=" + autoServicio +
                 ", estado=" + estado +
                 ", comentarios=" + comentarios +
+                ", accesoCondicion=" + accesoCondicion +
+                ", semilla=" + semilla +
                 '}';
     }
 }

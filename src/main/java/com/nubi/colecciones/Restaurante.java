@@ -20,18 +20,25 @@ public class Restaurante {
     private Estado estado;
     @Embedded
     private List<Comentario> comentarios;
+    private boolean accesoCondicion;
+    @Embedded
+    private List<Semilla> semilla;
 
 
     public Restaurante() {
         comentarios= new ArrayList<Comentario>();
+        semilla= new ArrayList<Semilla>();
 
     }
 
-    public Restaurante(String nombre, Localizacion localizacion, Estado estado, List<Comentario> comentarios) {
+    public Restaurante(String nombre, Localizacion localizacion, Estado estado, List<Comentario> comentarios,
+                       boolean accesoCondicion, List<Semilla> semilla) {
         this.nombre = nombre;
         this.localizacion = localizacion;
         this.estado = estado;
         this.comentarios = comentarios;
+        this.accesoCondicion = accesoCondicion;
+        this.semilla = semilla;
     }
 
     public String getNombre() {
@@ -66,4 +73,31 @@ public class Restaurante {
         this.comentarios = comentarios;
     }
 
+    public boolean isAccesoCondicion() {
+        return accesoCondicion;
+    }
+
+    public void setAccesoCondicion(boolean accesoCondicion) {
+        this.accesoCondicion = accesoCondicion;
+    }
+
+    public List<Semilla> getSemilla() {
+        return semilla;
+    }
+
+    public void setSemilla(List<Semilla> semilla) {
+        this.semilla = semilla;
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurante{" +
+                "nombre='" + nombre + '\'' +
+                ", localizacion=" + localizacion +
+                ", estado=" + estado +
+                ", comentarios=" + comentarios +
+                ", accesoCondicion=" + accesoCondicion +
+                ", semilla=" + semilla +
+                '}';
+    }
 }

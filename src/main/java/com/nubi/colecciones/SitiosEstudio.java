@@ -23,6 +23,7 @@ public class SitiosEstudio {
     private List<Comentario> comentarios;
     @Embedded
     private List<Semilla> semilla;
+    private boolean accesoCondicion;
 
 
     public SitiosEstudio() {
@@ -37,6 +38,16 @@ public class SitiosEstudio {
         this.toleranciaRuido = toleranciaRuido;
         this.comentarios = comentarios;
         this.semilla = semilla;
+    }
+
+    public SitiosEstudio(String nombre, Localizacion localizacion, Estado estado, String toleranciaRuido, List<Comentario> comentarios, List<Semilla> semilla, boolean accesoCondicion) {
+        this.nombre = nombre;
+        this.localizacion = localizacion;
+        this.estado = estado;
+        this.toleranciaRuido = toleranciaRuido;
+        this.comentarios = comentarios;
+        this.semilla = semilla;
+        this.accesoCondicion = accesoCondicion;
     }
 
     public String getNombre() {

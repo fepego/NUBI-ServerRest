@@ -723,4 +723,23 @@ public class ModeloNubiImp implements ModeloNubi {
             ds.update(contc,ops2);
 
     }
+    public List<Usuario> obtenerIntegrantes(String grupo)
+    {
+        List<Usuario> contactos= new ArrayList<Usuario>();
+        Usuario usuario= buscarUsuario(grupo);
+        if(usuario!=null && (usuario.getListaContactos().size()>0 || usuario.getListaContactos()!=null)) {
+            for (String s: usuario.getListaContactos())
+            {
+                List<Usuario> contacto=ds.createQuery(Usuario.class).field("_id").equal(s)
+                        .field("tipoUsuario").equal("usuario").asList();
+                if(contacto.size()>0)
+                {
+                    contactos.add(contacto.get(0));
+                }
+            }
+            return contactos;
+
+        }
+        return null;
+    }
 }
