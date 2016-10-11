@@ -670,7 +670,6 @@ public class ModeloNubiImp implements ModeloNubi {
             for (String s: usuario.getListaContactos())
             {
                 List<Usuario> contacto=ds.createQuery(Usuario.class).field("_id").equal(s)
-                        .filter("restricciones.privacidad",true)
                         .field("tipoUsuario").equal("usuario").asList();
                 if(contacto.size()>0)
                 {

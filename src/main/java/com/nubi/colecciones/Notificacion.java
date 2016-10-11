@@ -5,6 +5,8 @@ import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Index;
 import org.mongodb.morphia.annotations.Indexed;
 
+import java.util.Date;
+
 /**
  * Created by Felipe on 8/10/2016.
  */
@@ -20,6 +22,7 @@ public class Notificacion {
     private String destinatario;
     private String comentario;
     private boolean estadoLectura;
+    private Date  horaNotificacion;
 
     public Notificacion() {
     }
@@ -30,6 +33,17 @@ public class Notificacion {
         this.destinatario = destinatario;
         this.comentario = comentario;
         this.estadoLectura= false;
+    }
+
+    public Notificacion(String tipo, String remitente, String destinatario, String comentario, boolean estadoLectura,
+                        Date horaNotificacion) {
+
+        this.tipo = tipo;
+        this.remitente = remitente;
+        this.destinatario = destinatario;
+        this.comentario = comentario;
+        this.estadoLectura = estadoLectura;
+        this.horaNotificacion = horaNotificacion;
     }
 
     public String getId() {
@@ -80,6 +94,14 @@ public class Notificacion {
         this.estadoLectura = estadoLectura;
     }
 
+    public Date getHoraNotificacion() {
+        return horaNotificacion;
+    }
+
+    public void setHoraNotificacion(Date horaNotificacion) {
+        this.horaNotificacion = horaNotificacion;
+    }
+
     @Override
     public String toString() {
         return "Notificacion{" +
@@ -89,6 +111,7 @@ public class Notificacion {
                 ", destinatario='" + destinatario + '\'' +
                 ", comentario='" + comentario + '\'' +
                 ", estadoLectura=" + estadoLectura +
+                ", horaNotificacion=" + horaNotificacion +
                 '}';
     }
 }
