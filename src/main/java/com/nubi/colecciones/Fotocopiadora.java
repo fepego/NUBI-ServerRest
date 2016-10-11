@@ -70,4 +70,15 @@ public class Fotocopiadora {
     public void setComentarios(List<Comentario> comentarios) {
         this.comentarios = comentarios;
     }
+
+    @Override
+    public String toString() {
+        return "Fotocopiadora{" +
+                "nombre='" + nombre + '\'' +
+                ", localizacion=" + localizacion +
+                ", autoServicio=" + autoServicio +
+                ", estado=" + estado +
+                ", comentarios=" + comentarios +
+                '}';
+    }
 }

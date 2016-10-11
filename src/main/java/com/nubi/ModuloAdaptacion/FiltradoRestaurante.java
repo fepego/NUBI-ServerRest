@@ -36,7 +36,7 @@ public class FiltradoRestaurante {
         restaurantes=modelo.buscarRestaurantes();
         candidatos= new ArrayList<Candidato>();
             for (int i = 0; i < restaurantes.size(); i++) {
-                ruta= Mapzen.ObtenerMapa(usu.getLocalizacion().getLatitud(),usu.getLocalizacion().getLongitud(),restaurantes.get(i).getLocalizacion().getLatitud(),restaurantes.get(i).getLocalizacion().getLongitud());
+                ruta= Mapzen.balanceador(usu.getLocalizacion().getLatitud(),usu.getLocalizacion().getLongitud(),restaurantes.get(i).getLocalizacion().getLatitud(),restaurantes.get(i).getLocalizacion().getLongitud());
                 candidatos.add(new Candidato());
                 candidatos.get(i).setDistancia(ruta.getDistancia());
                 candidatos.get(i).setUsuario(usu);
