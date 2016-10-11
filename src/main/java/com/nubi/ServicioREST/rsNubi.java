@@ -15,6 +15,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -404,12 +405,26 @@ public class rsNubi {
         return servicios.obtenerGrupos(usuario);
 
     }
+
+    /**
+     * metodo para agregar y notificar un nuevo integrante de grupo
+     * @param grupo
+     * @param usuario
+     */
     @GET
     @Path("/agregar-contactogrupo")
     @Produces("application/json")
     public void agregarContactoGrupo(@QueryParam("grupo") String grupo,@QueryParam("usuario") String usuario) {
         servicios = new ServiciosNUBIImp();
         servicios.agregarContactoGrupo(grupo,usuario);
+
+    }
+    @GET
+    @Path("/notificacion-broadcast")
+    @Produces("application/json")
+    public Document notificacionGrupo(@QueryParam("grupo") String grupo,@QueryParam("comentario") String comentario,@QueryParam("sitio") String sitio) {
+        servicios = new ServiciosNUBIImp();
+        return servicios.agregarNotificiacionBroadCast(grupo,comentario,sitio);
 
     }
 }

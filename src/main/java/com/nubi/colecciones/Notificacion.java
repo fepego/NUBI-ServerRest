@@ -23,6 +23,7 @@ public class Notificacion {
     private String comentario;
     private boolean estadoLectura;
     private Date  horaNotificacion;
+    private String sitio;
 
     public Notificacion() {
     }
@@ -44,6 +45,16 @@ public class Notificacion {
         this.comentario = comentario;
         this.estadoLectura = estadoLectura;
         this.horaNotificacion = horaNotificacion;
+    }
+
+    public Notificacion(String tipo, String remitente, String destinatario, String comentario, boolean estadoLectura, Date horaNotificacion, String sitio) {
+        this.tipo = tipo;
+        this.remitente = remitente;
+        this.destinatario = destinatario;
+        this.comentario = comentario;
+        this.estadoLectura = estadoLectura;
+        this.horaNotificacion = horaNotificacion;
+        this.sitio = sitio;
     }
 
     public String getId() {
@@ -100,6 +111,14 @@ public class Notificacion {
 
     public void setHoraNotificacion(Date horaNotificacion) {
         this.horaNotificacion = horaNotificacion;
+    }
+
+    public String getSitio() {
+        return sitio;
+    }
+
+    public void setSitio(String sitio) {
+        this.sitio = sitio;
     }
 
     @Override
