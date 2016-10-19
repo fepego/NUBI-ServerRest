@@ -14,7 +14,7 @@ import java.util.Date;
 public class HistorialFotocopiadoras {
     @Indexed(expireAfterSeconds = 691200)
     @Id
-    private Date horaConsulta;
+    private long horaConsulta;
     private String diaRegistro;
     private double numAlertasLibre;
     private double numAlertasMedia;
@@ -26,8 +26,7 @@ public class HistorialFotocopiadoras {
     public HistorialFotocopiadoras() {
     }
 
-    public HistorialFotocopiadoras(Date horaConsulta, String diaRegistro, double numAlertasLibre, double numAlertasMedia,
-                                   double numAlertasLleno, Fotocopiadora fotocopiadora) {
+    public HistorialFotocopiadoras(long horaConsulta, String diaRegistro, double numAlertasLibre, double numAlertasMedia, double numAlertasLleno, Fotocopiadora fotocopiadora) {
         this.horaConsulta = horaConsulta;
         this.diaRegistro = diaRegistro;
         this.numAlertasLibre = numAlertasLibre;
@@ -36,11 +35,11 @@ public class HistorialFotocopiadoras {
         this.fotocopiadora = fotocopiadora;
     }
 
-    public Date getHoraConsulta() {
+    public long getHoraConsulta() {
         return horaConsulta;
     }
 
-    public void setHoraConsulta(Date horaConsulta) {
+    public void setHoraConsulta(long horaConsulta) {
         this.horaConsulta = horaConsulta;
     }
 

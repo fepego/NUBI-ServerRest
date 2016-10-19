@@ -408,7 +408,7 @@ public class ServiciosNUBIImp implements ServiciosNUBI {
         Document tipoLugar= mod.obtenerSitio(sitio);
         if(tipoLugar.get("tipoServicio").toString().equalsIgnoreCase("sitioEstudio"))
             return insertarAlertaSitioEstudio(sitio,comentario,estado);
-        if(tipoLugar.get("tipoServicio").toString().equalsIgnoreCase("restaruantes"))
+        if(tipoLugar.get("tipoServicio").toString().equalsIgnoreCase("restaurantes"))
             return insertarAlertaRestaurante(sitio,comentario,estado);
         if(tipoLugar.get("tipoServicio").toString().equalsIgnoreCase("fotocopiadoras"))
             return insertarAlertaFotocopiadora(sitio,comentario,estado);

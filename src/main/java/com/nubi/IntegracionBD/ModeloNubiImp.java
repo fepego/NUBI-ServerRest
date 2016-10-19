@@ -89,6 +89,32 @@ public class ModeloNubiImp implements ModeloNubi {
         }
         return null;
     }
+    public Iterator<Fotocopiadora> semillaFotocopiadora(String tipoDia)
+    {
+        Date d= new Date();
+        String dia= Calculador.diaString(d.getDay());
+        d.setYear(71);
+        d.setMonth(0);
+        d.setDate(1);
+        long hora=d.getTime()-fechaCte.getTimeInMillis();
+        AggregationPipeline agg= ds.createAggregation(Fotocopiadora.class)
+                .unwind("semilla")
+                .match(ds.createQuery(Fotocopiadora.class).field("semilla.tipoDia").equal(tipoDia))
+                .match(ds.createQuery(Fotocopiadora.class).field("semilla.dia").equal(dia))
+                .match(ds.createQuery(Fotocopiadora.class).field("semilla.horaInicio").lessThan(hora))
+                .match(ds.createQuery(Fotocopiadora.class).field("semilla.horaFin").greaterThan(hora))
+                .project(projection("semilla.tipoDia"),
+                        projection("semilla.probLibre"),
+                        projection("semilla.probMedia"),
+                        projection("semilla.probAlta"),
+                        projection("semilla.dia"));
+        Iterator<Fotocopiadora> fotocopiadoras=agg.aggregate(Fotocopiadora.class);
+        if(fotocopiadoras.hasNext())
+        {
+            return fotocopiadoras;
+        }
+        return null;
+    }
     public boolean agregarAlerta(Alerta Alt)
     {
         if(Alt!=null)
@@ -117,6 +143,44 @@ public class ModeloNubiImp implements ModeloNubi {
         s.setNombre(nombreSitio);
         int numAlertas= (int)ds.createQuery(Alerta.class).field("estado").equal(estado)
                 .field("sitioEst").equal(s)
+                .field("horaPublicacion").greaterThan(horamin)
+                .field("horaPublicacion").lessThan(horamax)
+                .countAll();
+        return numAlertas;
+    }
+    public int contadorAlertasFotocopiadoras(String estado, String nombreSitio)
+    {
+        Date fecha= new Date();
+        fecha.setHours(0);
+        fecha.setMinutes(0);
+        Date fechaIntervalo= new Date();
+        fechaIntervalo.setMinutes(fechaIntervalo.getMinutes()-10);
+        long horamin=fechaIntervalo.getTime()-fecha.getTime();
+        fechaIntervalo.setMinutes(fechaIntervalo.getMinutes()+20);
+        long horamax=fechaIntervalo.getTime()-fecha.getTime();
+        Fotocopiadora s= new Fotocopiadora();
+        s.setNombre(nombreSitio);
+        int numAlertas= (int)ds.createQuery(Alerta.class).field("estado").equal(estado)
+                .field("fotocopiadora").equal(s)
+                .field("horaPublicacion").greaterThan(horamin)
+                .field("horaPublicacion").lessThan(horamax)
+                .countAll();
+        return numAlertas;
+    }
+    public int contadorAlertasRestaurantes(String estado, String nombreSitio)
+    {
+        Date fecha= new Date();
+        fecha.setHours(0);
+        fecha.setMinutes(0);
+        Date fechaIntervalo= new Date();
+        fechaIntervalo.setMinutes(fechaIntervalo.getMinutes()-10);
+        long horamin=fechaIntervalo.getTime()-fecha.getTime();
+        fechaIntervalo.setMinutes(fechaIntervalo.getMinutes()+20);
+        long horamax=fechaIntervalo.getTime()-fecha.getTime();
+        Restaurante s= new Restaurante();
+        s.setNombre(nombreSitio);
+        int numAlertas= (int)ds.createQuery(Alerta.class).field("estado").equal(estado)
+                .field("restaurante").equal(s)
                 .field("horaPublicacion").greaterThan(horamin)
                 .field("horaPublicacion").lessThan(horamax)
                 .countAll();
@@ -206,6 +270,31 @@ public class ModeloNubiImp implements ModeloNubi {
                 .match(ds.createQuery(HistorialRestaurantes.class).field("_id").greaterThanOrEq(horamin))
                 .match(ds.createQuery(HistorialRestaurantes.class).field("_id").lessThanOrEq(horamax))
                 .group("restaurante",
+                        grouping("totalAlertasLibre",new Accumulator("$sum","numAlertasLibre")), grouping("totalAlertasMedio",new Accumulator("$sum","numAlertasMedia")),
+                        grouping("totalAlertasLLeno",new Accumulator("$sum","numAlertasLleno"))).aggregate(resultadoHistorico.class);
+        if(resHistorico.hasNext())
+        {
+            return resHistorico;
+        }
+        return null;
+    }
+    public Iterator <resultadoHistorico> getHistoricoFotocopiadora(String id)
+    {
+        Date fecha= new Date();
+        fecha.setHours(0);
+        fecha.setMinutes(0);
+        Date fechaInt=  new Date();
+        fechaInt.setHours(fechaInt.getHours()-1);
+        long horamin=fechaInt.getTime()-fecha.getTime();
+        fechaInt.setHours(fechaInt.getHours()+2);
+        long horamax=fechaInt.getTime()-fecha.getTime();
+        Fotocopiadora fotocopiadoras= new Fotocopiadora();
+        fotocopiadoras.setNombre(id);
+        Iterator <resultadoHistorico> resHistorico=ds.createAggregation(HistorialFotocopiadoras.class)
+                .match(ds.createQuery(HistorialFotocopiadoras.class).field("fotocopiadora").equal(fotocopiadoras))
+                .match(ds.createQuery(HistorialFotocopiadoras.class).field("_id").greaterThanOrEq(horamin))
+                .match(ds.createQuery(HistorialFotocopiadoras.class).field("_id").lessThanOrEq(horamax))
+                .group("fotocopiadora",
                         grouping("totalAlertasLibre",new Accumulator("$sum","numAlertasLibre")), grouping("totalAlertasMedio",new Accumulator("$sum","numAlertasMedia")),
                         grouping("totalAlertasLLeno",new Accumulator("$sum","numAlertasLleno"))).aggregate(resultadoHistorico.class);
         if(resHistorico.hasNext())
@@ -821,6 +910,18 @@ public class ModeloNubiImp implements ModeloNubi {
      * @param historial
      */
     public void agregarHistorialRestaurante(HistorialRestaurantes historial)
+    {
+        if(historial!=null)
+        {
+            ds.save(historial);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param historial
+     */
+    public void agregarHistorialFotocopiadora(HistorialFotocopiadoras historial)
     {
         if(historial!=null)
         {

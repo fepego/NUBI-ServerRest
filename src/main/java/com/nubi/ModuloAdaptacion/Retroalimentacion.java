@@ -36,6 +36,7 @@ public class Retroalimentacion {
                 try {
                     probabilidadAlertasSitiosEst(kContainer);
                     probabilidadRestaurantes(kContainer);
+                    probabilidadFotocopiadoras( kContainer);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -147,9 +148,9 @@ public class Retroalimentacion {
                         Restaurante restaurante = restaurates.next();
                         System.out.println(restaurante.getNombre());
                         alt = mod.consultarAlertas("Libre", restaurante.getNombre());
-                        totalAlertasLibres = mod.contadorAlertas("Libre", restaurante.getNombre());
-                        totalAlertasMedia = mod.contadorAlertas("Medio", restaurante.getNombre());
-                        totalalertasLleno = mod.contadorAlertas("LLeno", restaurante.getNombre());
+                        totalAlertasLibres = mod.contadorAlertasRestaurantes("Libre", restaurante.getNombre());
+                        totalAlertasMedia = mod.contadorAlertasRestaurantes("Medio", restaurante.getNombre());
+                        totalalertasLleno = mod.contadorAlertasRestaurantes("LLeno", restaurante.getNombre());
                         total = totalAlertasLibres + totalAlertasMedia + totalalertasLleno;
                         System.out.println("total: " + total);
                         //calculo probabilidad de disponibilidad por alertas
@@ -200,6 +201,90 @@ public class Retroalimentacion {
                         HistorialRestaurantes historico= new HistorialRestaurantes(Calculador.horaConsulta(0),
                                 Calculador.diaString(new Date().getDay()),totalAlertasLibres,totalAlertasMedia,totalalertasLleno,restaurante);
                         mod.agregarHistorialRestaurante(historico);
+                        Thread.sleep(1000);
+                    }
+                }
+            }
+            public void probabilidadFotocopiadoras(KieContainer kContainer) throws InterruptedException {
+
+                ModeloNubi mod= new ModeloNubiImp();
+                //variables de calculo de probabilidad alertas de los 3 estados
+                double probaltLib,probaltMed,probaltLlen;
+                //Variables de calculo probabilidad de historicos de los 3 estados
+                double probHistLibre, probHistMedio, probHistLleno;
+                //Variables para calculo de probabilidad de Bayes con semilla y alertas
+                double problibre, probMedia, probLleno;
+                //Variables para calculo de probabilidad de bayes (x/alertas) e historicos
+                double probFinLibre, probFinmedia,probFinLleno;
+                double totalAlertasLibres,totalAlertasMedia,totalalertasLleno, total,totalHist;
+                //variables auxiliares de semilla
+                double semAlt, semMed, semLib;
+                Iterator<Alerta> alt;
+                Iterator <Fotocopiadora> fotocopiadoras;
+
+                Iterator <resultadoHistorico> resHist;
+
+                if(!Calculador.semanaCorte())
+                {
+                    //Calcular primero semilla del dia y la hora
+                    fotocopiadoras= mod.semillaFotocopiadora("Normal");
+                    while (fotocopiadoras.hasNext()) {
+                        Fotocopiadora fotocopiadora = fotocopiadoras.next();
+                        System.out.println(fotocopiadora.getNombre());
+                        alt = mod.consultarAlertas("Libre", fotocopiadora.getNombre());
+                        totalAlertasLibres = mod.contadorAlertasFotocopiadoras("Libre", fotocopiadora.getNombre());
+                        totalAlertasMedia = mod.contadorAlertasFotocopiadoras("Medio", fotocopiadora.getNombre());
+                        totalalertasLleno = mod.contadorAlertasFotocopiadoras("LLeno", fotocopiadora.getNombre());
+                        total = totalAlertasLibres + totalAlertasMedia + totalalertasLleno;
+                        System.out.println("total: " + total);
+                        //calculo probabilidad de disponibilidad por alertas
+                        probaltLib= totalAlertasLibres/total;
+                        System.out.println("ptob lib"+totalAlertasLibres);
+                        probaltMed= totalAlertasMedia/total;
+                        probaltLlen= totalalertasLleno/total;
+                        System.out.println("prob alertas: "+probaltLib+" "+probaltMed+" "+probaltLlen);
+                        resHist=mod.getHistoricoFotocopiadora(fotocopiadora.getNombre());
+                        semLib=fotocopiadora.getSemilla().get(0).getProbLibre();
+                        semMed=fotocopiadora.getSemilla().get(0).getProbMedia();
+                        semAlt=fotocopiadora.getSemilla().get(0).getProbAlta();
+                        System.out.println("semillas: "+semLib+" "+semMed+" "+semAlt);
+                        //Calculo bayes dado: la probabilidad de que este en algun estado (libre, medio, lleno) dada la probabilidad
+                        // de alertas y semilla
+                        problibre=(probaltLib*semLib)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                        probMedia=(probaltMed*semMed)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                        probLleno=(probaltLlen*semAlt)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                        System.out.println("rprobabilidades semilla y alt: "+problibre+ " "+probMedia+" "+probLleno);
+                        if(resHist==null)
+                        {
+                            probabilidades prob= new probabilidades(fotocopiadora.getNombre(),problibre,probMedia,probLleno);
+                            StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
+                            kSession.execute(prob);
+                        }
+                        else
+                        {
+                            // Mongo retorna un aggregation con lo que encuentra de todos los historicos evita un loop y consumo de máquina
+
+                            resultadoHistorico aux=resHist.next();
+
+                            totalHist= (int) (aux.getTotalAlertasLibre()+aux.getTotalAlertasMedio()+aux.getTotalAlertasLibre());
+                            System.out.println("total hist"+totalHist);
+                            probHistLibre=aux.getTotalAlertasLibre()/totalHist;
+                            probHistMedio=aux.getTotalAlertasMedio()/totalHist;
+                            probHistLleno=aux.getTotalAlertasLLeno()/totalHist;
+                            System.out.println("prob historico"+ probHistLibre+" "+probHistMedio+" "+probHistLleno);
+                            //calculo bayes de cualquier estado dadas la prob de (semilla/alertas) e historico
+                            probFinLibre=(problibre*probHistLibre)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                            probFinmedia=(probMedia*probHistMedio)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                            probFinLleno=(probLleno*probHistLleno)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                            System.out.println("probabilidades sem/alt e hist "+probFinLibre+" "+probFinmedia+" "+probFinLleno);
+                            probabilidades prob= new probabilidades(fotocopiadora.getNombre(),probFinLibre,probFinmedia,probFinLleno);
+                            StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
+                            kSession.execute(prob);
+
+                        }
+                        HistorialFotocopiadoras historico= new HistorialFotocopiadoras(Calculador.horaConsulta(0),
+                                Calculador.diaString(new Date().getDay()),totalAlertasLibres,totalAlertasMedia,totalalertasLleno,fotocopiadora);
+                        mod.agregarHistorialFotocopiadora(historico);
                         Thread.sleep(1000);
                     }
                 }

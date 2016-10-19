@@ -14,12 +14,16 @@ import java.util.List;
 public interface ModeloNubi {
     public Iterator<SitiosEstudio> semillaSitiosEst(String tipoDia);
     public Iterator<Restaurante> semillaRestaurante(String tipoDia);
+    public Iterator<Fotocopiadora> semillaFotocopiadora(String tipoDia);
     public boolean agregarAlerta(Alerta Alt);
     public Iterator<Alerta> consultarAlertas(String estado, String nombreSitio);
     public Iterator<HistorialSitios> consultarHistoricoSitioEst(String id);
     public int contadorAlertas(String estado, String nombreSitio);
+    public int contadorAlertasFotocopiadoras(String estado, String nombreSitio);
+    public int contadorAlertasRestaurantes(String estado, String nombreSitio);
     public Iterator <resultadoHistorico>  getHistoricoSitioEst(String id);
     public Iterator <resultadoHistorico> getHistoricoRestaurantes(String id);
+    public Iterator <resultadoHistorico> getHistoricoFotocopiadora(String id);
     public void actualizarSitioEstudio(String nombreSitio, double disponibilidad);
     public void InsertarRuta(Ruta ruta);
     public Iterator <Ruta> buscarRuta(double latInicio, double longInicio, double latDestino, double longDestino);
@@ -202,5 +206,9 @@ public interface ModeloNubi {
      * @param historial
      */
     public void agregarHistorialRestaurante(HistorialRestaurantes historial);
-
+    /**
+     * Método para agregar historial de fotocopiadora sobre disponibilidad en NUBI
+     * @param historial
+     */
+    public void agregarHistorialFotocopiadora(HistorialFotocopiadoras historial);
 }
