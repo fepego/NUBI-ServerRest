@@ -14,7 +14,7 @@ import java.util.Date;
 public class HistorialRestaurantes {
     @Indexed(expireAfterSeconds = 691200)
     @Id
-    private Date horaConsulta;
+    private long horaConsulta;
     private String diaRegistro;
     private double numAlertasLibre;
     private double numAlertasMedia;
@@ -26,9 +26,8 @@ public class HistorialRestaurantes {
     public HistorialRestaurantes() {
     }
 
-    public HistorialRestaurantes(Date horaConsulta, String diaRegistro, double numAlertasLibre,
-                                 double numAlertasMedia, double numAlertasLleno,
-                                 Restaurante restaurante) {
+    public HistorialRestaurantes(long horaConsulta, String diaRegistro, double numAlertasLibre,
+                                 double numAlertasMedia, double numAlertasLleno, Restaurante restaurante) {
         this.horaConsulta = horaConsulta;
         this.diaRegistro = diaRegistro;
         this.numAlertasLibre = numAlertasLibre;
@@ -37,11 +36,11 @@ public class HistorialRestaurantes {
         this.restaurante = restaurante;
     }
 
-    public Date getHoraConsulta() {
+    public long getHoraConsulta() {
         return horaConsulta;
     }
 
-    public void setHoraConsulta(Date horaConsulta) {
+    public void setHoraConsulta(long horaConsulta) {
         this.horaConsulta = horaConsulta;
     }
 

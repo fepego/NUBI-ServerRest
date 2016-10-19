@@ -63,6 +63,32 @@ public class ModeloNubiImp implements ModeloNubi {
         }
         return null;
     }
+    public Iterator<Restaurante> semillaRestaurante(String tipoDia)
+    {
+        Date d= new Date();
+        String dia= Calculador.diaString(d.getDay());
+        d.setYear(71);
+        d.setMonth(0);
+        d.setDate(1);
+        long hora=d.getTime()-fechaCte.getTimeInMillis();
+        AggregationPipeline agg= ds.createAggregation(Restaurante.class)
+                .unwind("semilla")
+                .match(ds.createQuery(Restaurante.class).field("semilla.tipoDia").equal(tipoDia))
+                .match(ds.createQuery(Restaurante.class).field("semilla.dia").equal(dia))
+                .match(ds.createQuery(Restaurante.class).field("semilla.horaInicio").lessThan(hora))
+                .match(ds.createQuery(Restaurante.class).field("semilla.horaFin").greaterThan(hora))
+                .project(projection("semilla.tipoDia"),
+                        projection("semilla.probLibre"),
+                        projection("semilla.probMedia"),
+                        projection("semilla.probAlta"),
+                        projection("semilla.dia"));
+        Iterator<Restaurante> restaurante=agg.aggregate(Restaurante.class);
+        if(restaurante.hasNext())
+        {
+            return restaurante;
+        }
+        return null;
+    }
     public boolean agregarAlerta(Alerta Alt)
     {
         if(Alt!=null)
@@ -118,22 +144,6 @@ public class ModeloNubiImp implements ModeloNubi {
         }
         return null;
     }
-    public boolean addHistoricoSitioEst(HistorialSitios historico)
-    {
-        if(historico!=null)
-        {
-            Date fecha= new Date();
-            fecha.setHours(0);
-            fecha.setMinutes(0);
-            long hora=new Date().getTime()-fecha.getTime();
-            String dia= Calculador.diaString(new Date().getDay());
-            historico.setHoraConsulta(hora);
-            historico.setDia(dia);
-            ds.save(historico);
-            return true;
-        }
-        return false;
-    }
     public Iterator<HistorialSitios> consultarHistoricoSitioEst(String id)
     {
         Date fecha= new Date();
@@ -172,6 +182,31 @@ public class ModeloNubiImp implements ModeloNubi {
                 .match(ds.createQuery(HistorialSitios.class).field("_id").lessThanOrEq(horamax))
                 .group("sitiosEstudio",
                     grouping("totalAlertasLibre",new Accumulator("$sum","numAlertasLibre")), grouping("totalAlertasMedio",new Accumulator("$sum","numAlertasMedia")),
+                        grouping("totalAlertasLLeno",new Accumulator("$sum","numAlertasLleno"))).aggregate(resultadoHistorico.class);
+        if(resHistorico.hasNext())
+        {
+            return resHistorico;
+        }
+        return null;
+    }
+    public Iterator <resultadoHistorico> getHistoricoRestaurantes(String id)
+    {
+        Date fecha= new Date();
+        fecha.setHours(0);
+        fecha.setMinutes(0);
+        Date fechaInt=  new Date();
+        fechaInt.setHours(fechaInt.getHours()-1);
+        long horamin=fechaInt.getTime()-fecha.getTime();
+        fechaInt.setHours(fechaInt.getHours()+2);
+        long horamax=fechaInt.getTime()-fecha.getTime();
+        Restaurante restaurante= new Restaurante();
+        restaurante.setNombre(id);
+        Iterator <resultadoHistorico> resHistorico=ds.createAggregation(HistorialRestaurantes.class)
+                .match(ds.createQuery(HistorialRestaurantes.class).field("restaurante").equal(restaurante))
+                .match(ds.createQuery(HistorialRestaurantes.class).field("_id").greaterThanOrEq(horamin))
+                .match(ds.createQuery(HistorialRestaurantes.class).field("_id").lessThanOrEq(horamax))
+                .group("restaurante",
+                        grouping("totalAlertasLibre",new Accumulator("$sum","numAlertasLibre")), grouping("totalAlertasMedio",new Accumulator("$sum","numAlertasMedia")),
                         grouping("totalAlertasLLeno",new Accumulator("$sum","numAlertasLleno"))).aggregate(resultadoHistorico.class);
         if(resHistorico.hasNext())
         {
@@ -774,6 +809,18 @@ public class ModeloNubiImp implements ModeloNubi {
      * @param historial
      */
     public void agregarHistorialSitiosEstudio(HistorialSitios historial)
+    {
+        if(historial!=null)
+        {
+            ds.save(historial);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param historial
+     */
+    public void agregarHistorialRestaurante(HistorialRestaurantes historial)
     {
         if(historial!=null)
         {
