@@ -178,4 +178,17 @@ public interface ModeloNubi {
      */
     public List<Usuario> obtenerIntegrantes(String grupo);
 
+    /**
+     * Método para actualizar el documento grupo
+     * @param grupo
+     */
+    public void actualizarGrupo(Usuario grupo);
+
+    /**
+     * Método para obtener el documento de un grupo
+      * @param grupo
+     * @return
+     */
+    public Usuario obtenerInfoGrupo(String grupo);
+
 }

@@ -3,6 +3,7 @@ package com.nubi.colecciones;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Indexed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 public class SitiosEstudio {
     @Id
+    @Indexed
     private String nombre;
     @Embedded
     private Localizacion localizacion;
@@ -49,6 +51,7 @@ public class SitiosEstudio {
         this.semilla = semilla;
         this.accesoCondicion = accesoCondicion;
     }
+
 
     public String getNombre() {
         return nombre;
@@ -98,6 +101,14 @@ public class SitiosEstudio {
         this.comentarios = comentarios;
     }
 
+    public boolean isAccesoCondicion() {
+        return accesoCondicion;
+    }
+
+    public void setAccesoCondicion(boolean accesoCondicion) {
+        this.accesoCondicion = accesoCondicion;
+    }
+
     @Override
     public String toString() {
         return "SitiosEstudio{" +
@@ -107,6 +118,7 @@ public class SitiosEstudio {
                 ", toleranciaRuido='" + toleranciaRuido + '\'' +
                 ", comentarios=" + comentarios +
                 ", semilla=" + semilla +
+                ", accesoCondicion=" + accesoCondicion +
                 '}';
     }
 }

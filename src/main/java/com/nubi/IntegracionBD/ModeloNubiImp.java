@@ -742,4 +742,30 @@ public class ModeloNubiImp implements ModeloNubi {
         }
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     * @param grupo
+     */
+    public void actualizarGrupo(Usuario grupo)
+    {
+        if(grupo!=null)
+        {
+            ds.save(grupo);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param grupo
+     * @return
+     */
+    public Usuario obtenerInfoGrupo(String grupo)
+    {
+        if(grupo!=null)
+        {
+            return ds.createQuery(Usuario.class).field("_id").equal(grupo).asList().get(0);
+        }
+        return null;
+    }
 }

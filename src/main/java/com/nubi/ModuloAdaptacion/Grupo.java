@@ -1,5 +1,7 @@
 package com.nubi.ModuloAdaptacion;
 
+import com.nubi.IntegracionBD.ModeloNubi;
+import com.nubi.IntegracionBD.ModeloNubiImp;
 import com.nubi.colecciones.Usuario;
 
 import java.util.List;
@@ -9,9 +11,41 @@ import java.util.List;
  */
 public class Grupo {
 
-    public static void validarPerfilGrupo(String grupo)
-    {
 
+    private Usuario grupo;
+    private Usuario integrante;
+
+    public Grupo() {
     }
 
+    public Grupo( Usuario grupo, Usuario Integrante) {
+
+        this.grupo = grupo;
+        integrante= Integrante;
+    }
+
+
+    public Usuario getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Usuario grupo) {
+        this.grupo = grupo;
+    }
+
+    public Usuario getIntegrante() {
+        return integrante;
+    }
+
+    public void setIntegrante(Usuario integrantes) {
+        this.integrante = integrante;
+    }
+
+    @Override
+    public String toString() {
+        return "Grupo{" +
+                ", grupo=" + grupo +
+                ", integrantes=" + integrante +
+                '}';
+    }
 }

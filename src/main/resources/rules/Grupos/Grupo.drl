@@ -1,7 +1,15 @@
 package rules.Grupos;
 dialect  "mvel"
-
-rule "Grupo"
+import com.nubi.ModuloAdaptacion.Grupo
+import com.nubi.colecciones.Preferencia
+import com.nubi.colecciones.Restriccion
+rule "Cambio de Restricciones en caso de un integrante con discapacidad"
     when
+        g: Grupo(g.grupo.restricciones.movilidad==false, g.integrante.restricciones.movilidad ==true)
     then
+        g.getGrupo().getRestricciones().setMovilidad(new Boolean(true));
+        g.getGrupo().getRestricciones().setGradoMovilidad(g.getIntegrante().getRestricciones().getGradoMovilidad());
+        g.getGrupo().setFavoritosEstudio(g.getIntegrante().getFavoritosEstudio());
+        g.getGrupo().setFavoritosFotocopiadoras(g.getIntegrante().getFavoritosFotocopiadoras());
+        g.getGrupo().setFavoritosRestaurantes(g.getIntegrante().getFavoritosRestaurantes());
 end

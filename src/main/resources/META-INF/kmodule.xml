@@ -12,4 +12,7 @@
     <kbase name="ReglasprobabilidadSitio" packages="rules.Retroalimentacion">
         <ksession name="EstadoSitio" type="stateless"/>
     </kbase>
+    <kbase name="matchGrupos" packages="rules.Grupos">
+        <ksession name="Grupo" type="stateless"/>
+    </kbase>
 </kmodule>
