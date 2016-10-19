@@ -191,4 +191,10 @@ public interface ModeloNubi {
      */
     public Usuario obtenerInfoGrupo(String grupo);
 
+    /**
+     * Método para agregar historial de disponibilidad en NUBI
+     * @param historial
+     */
+    public void agregarHistorialSitiosEstudio(HistorialSitios historial);
+
 }

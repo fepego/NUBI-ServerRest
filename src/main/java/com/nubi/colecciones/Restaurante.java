@@ -41,6 +41,17 @@ public class Restaurante {
         this.semilla = semilla;
     }
 
+    public Restaurante(String nombre, Localizacion localizacion, Estado estado,
+                       List<Comentario> comentarios, boolean accesoCondicion, List<Semilla> semilla, boolean accesoCondicion1) {
+        this.nombre = nombre;
+        this.localizacion = localizacion;
+        this.estado = estado;
+        this.comentarios = comentarios;
+        this.accesoCondicion = accesoCondicion;
+        this.semilla = semilla;
+        this.accesoCondicion = accesoCondicion1;
+    }
+
     public String getNombre() {
         return nombre;
     }

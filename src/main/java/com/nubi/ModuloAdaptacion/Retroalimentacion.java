@@ -39,9 +39,9 @@ public class Retroalimentacion {
             KieContainer kContainer = ks.getKieClasspathContainer();
             public void run() {
 
-                probabilidadAlertas(kContainer);
+                probabilidadAlertasSitiosEst(kContainer);
             }
-            public void probabilidadAlertas(KieContainer kContainer)
+            public void probabilidadAlertasSitiosEst(KieContainer kContainer)
             {
 
                 ModeloNubi mod= new ModeloNubiImp();
@@ -64,6 +64,7 @@ public class Retroalimentacion {
                 {
                     //Calcular primero semilla del dia y la hora
                     sitEst= mod.semillaSitiosEst("Normal");
+                    System.out.println(sitEst.next());
                     while (sitEst.hasNext()) {
                         SitiosEstudio s = sitEst.next();
                         System.out.println(s.getNombre());

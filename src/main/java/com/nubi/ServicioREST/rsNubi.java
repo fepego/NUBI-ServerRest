@@ -427,4 +427,12 @@ public class rsNubi {
         return servicios.agregarNotificiacionBroadCast(grupo,comentario,sitio);
 
     }
+    @GET
+    @Path("/retroalimentacion")
+    @Produces("application/json")
+    public void retroalimentacion() {
+        servicios = new ServiciosNUBIImp();
+        servicios.activarRetroalimentacion();
+
+    }
 }

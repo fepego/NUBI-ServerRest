@@ -768,4 +768,16 @@ public class ModeloNubiImp implements ModeloNubi {
         }
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     * @param historial
+     */
+    public void agregarHistorialSitiosEstudio(HistorialSitios historial)
+    {
+        if(historial!=null)
+        {
+            ds.save(historial);
+        }
+    }
 }
