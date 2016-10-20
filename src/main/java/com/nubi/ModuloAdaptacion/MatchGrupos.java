@@ -28,6 +28,7 @@ public class MatchGrupos {
         this.grupo = grupo;
         modelo= new ModeloNubiImp();
     }
+
     public void generarMatch(String nombre)
     {
         ks = KieServices.Factory.get();
