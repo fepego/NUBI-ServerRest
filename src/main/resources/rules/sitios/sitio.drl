@@ -87,4 +87,16 @@ rule "Tolerancia Ruido Alto"
         c.setPuntaje(c.getPuntaje()+1);
         System.out.println("se agregó 1 por tolerancia ruido Alto");
 end
-
+rule "Sitio de estudio Favorito"
+    when
+        c: Candidato(favorito==true)
+    then
+        c.setPuntaje(c.getPuntaje()+1);
+end
+//Condiciones de nulidad
+rule "Acceso condición Física"
+    when
+        c:Candidato(c.sitio.accesoCondicion==false && c.usuario.restricciones.movilidad==true)
+    then
+        c.setPuntaje(0);
+ end

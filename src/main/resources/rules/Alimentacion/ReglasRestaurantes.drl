@@ -56,4 +56,19 @@ rule "Regla por Disponibilidad en estado LLeno y usuario con preferencia a Cualq
         c.setPuntaje(c.getPuntaje()+1);
         System.out.println("se agregó 1 por disponibilidad");
 end
+rule "Sitio de estudio Favorito restaurante"
+    when
+        c: Candidato(favorito==true)
+    then
+        c.setPuntaje(c.getPuntaje()+1);
+end
+//Condiciones de nulidad
+rule "Acceso condición Física restaurante"
+    when
+        c:Candidato(c.restaurante.accesoCondicion==false && c.usuario.restricciones.movilidad==true)
+    then
+    System.out.println("se aplico condicion nulidad");
+        c.setPuntaje(0);
+ end
+
 

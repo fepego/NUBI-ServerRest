@@ -42,6 +42,14 @@ public class FiltradoFotocopiadora {
             candidatos.get(i).setUsuario(usu);
             candidatos.get(i).setFotocopiadora(fotocopiadoras.get(i));
             candidatos.get(i).setPuntaje(0);
+            if(modelo.verificarFavorito(usu.getIdUsuario(),fotocopiadoras.get(i).getNombre()))
+            {
+                candidatos.get(i).setFavorito(true);
+            }
+            else
+            {
+                candidatos.get(i).setFavorito(false);
+            }
             kSession.execute(candidatos.get(i));
         }
         Collections.sort(candidatos);

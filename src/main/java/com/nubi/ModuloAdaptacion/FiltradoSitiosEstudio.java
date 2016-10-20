@@ -45,6 +45,15 @@ public class FiltradoSitiosEstudio {
             candidatos.get(i).setUsuario(usu);
             candidatos.get(i).setSitio(sitiosEstudio.get(i));
             candidatos.get(i).setPuntaje(0);
+            if(modelo.verificarFavorito(usu.getIdUsuario(),sitiosEstudio.get(i).getNombre()))
+            {
+                candidatos.get(i).setFavorito(true);
+            }
+            else
+            {
+                candidatos.get(i).setFavorito(false);
+            }
+
             kSession.execute(candidatos.get(i));
 
         }

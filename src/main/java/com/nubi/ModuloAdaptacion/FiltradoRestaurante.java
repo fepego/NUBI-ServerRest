@@ -42,6 +42,14 @@ public class FiltradoRestaurante {
                 candidatos.get(i).setUsuario(usu);
                 candidatos.get(i).setRestaurante(restaurantes.get(i));
                 candidatos.get(i).setPuntaje(0);
+                if(modelo.verificarFavorito(usu.getIdUsuario(),restaurantes.get(i).getNombre()))
+                {
+                    candidatos.get(i).setFavorito(true);
+                }
+                else
+                {
+                    candidatos.get(i).setFavorito(false);
+                }
                 kSession.execute(candidatos.get(i));
             }
             Collections.sort(candidatos);
