@@ -36,6 +36,7 @@ public class Usuario {
     @Reference(idOnly = true)
     private List<String> listaContactos;
     private List<String> grupos;
+    private int puntaje;
 
     public Usuario(String idUsuario, String password) {
         this.idUsuario = idUsuario;
@@ -47,6 +48,7 @@ public class Usuario {
         listaContactos= new ArrayList<String>();
         localizacion=new Localizacion();
         grupos= new ArrayList<String>();
+        puntaje=0;
 
     }
 
@@ -57,7 +59,7 @@ public class Usuario {
         favoritosRestaurantes= new ArrayList<Restaurante>();
         listaContactos= new ArrayList<String>();
         grupos= new ArrayList<String>();
-
+        puntaje=0;
     }
 
 
@@ -70,6 +72,7 @@ public class Usuario {
         favoritosFotocopiadoras= new ArrayList<Fotocopiadora>();
         favoritosRestaurantes= new ArrayList<Restaurante>();
         listaContactos= new ArrayList<String>();
+        puntaje=0;
     }
 
     public String getIdUsuario() {
@@ -176,6 +179,14 @@ public class Usuario {
         this.grupos = grupos;
     }
 
+    public int getPuntaje() {
+        return puntaje;
+    }
+
+    public void setPuntaje(int puntaje) {
+        this.puntaje = puntaje;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +
@@ -183,6 +194,7 @@ public class Usuario {
                 ", carrera='" + carrera + '\'' +
                 ", password='" + password + '\'' +
                 ", tipoUsuario='" + tipoUsuario + '\'' +
+                ", administrador='" + administrador + '\'' +
                 ", localizacion=" + localizacion +
                 ", preferencias=" + preferencias +
                 ", restricciones=" + restricciones +
@@ -190,6 +202,8 @@ public class Usuario {
                 ", favoritosRestaurantes=" + favoritosRestaurantes +
                 ", favoritosFotocopiadoras=" + favoritosFotocopiadoras +
                 ", listaContactos=" + listaContactos +
+                ", grupos=" + grupos +
+                ", puntaje=" + puntaje +
                 '}';
     }
 }
