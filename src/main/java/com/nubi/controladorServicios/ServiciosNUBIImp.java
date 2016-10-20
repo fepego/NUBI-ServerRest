@@ -549,8 +549,9 @@ public class ServiciosNUBIImp implements ServiciosNUBI {
     /**
      * {@inheritDoc}
      */
-    public void activarRetroalimentacion()
+    public Document activarRetroalimentacion(boolean estado)
     {
-        Retroalimentacion.recalcularDisponibilidad();
+        Retroalimentacion mecanismoRet= new Retroalimentacion();
+        return mecanismoRet.recalcularDisponibilidad(estado);
     }
 }

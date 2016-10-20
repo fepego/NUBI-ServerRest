@@ -5,6 +5,7 @@ import com.nubi.IntegracionBD.ModeloNubi;
 import com.nubi.IntegracionBD.ModeloNubiImp;
 import com.nubi.Utils.Calculador;
 import com.nubi.colecciones.*;
+import org.bson.Document;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.StatelessKieSession;
@@ -17,9 +18,20 @@ import java.util.*;
  * Created by felipe on 13/09/16.
  */
 public class Retroalimentacion {
+    private  boolean actividadTimer;
+    private Timer timer = new Timer();
 
-    public static void recalcularDisponibilidad()
+    public Retroalimentacion() {
+        actividadTimer=false;
+    }
+
+    public Retroalimentacion(boolean actividadTimer) {
+        this.actividadTimer = actividadTimer;
+    }
+
+    public   Document recalcularDisponibilidad( boolean estado)
     {
+        actividadTimer=estado;
         // Clase en la que está el código a ejecutar
         TimerTask timerTask = new TimerTask() {
             int i=0;
@@ -31,15 +43,32 @@ public class Retroalimentacion {
             Datastore ds= mph.createDatastore(cli,"NUBI");
             KieServices ks = KieServices.Factory.get();
             KieContainer kContainer = ks.getKieClasspathContainer();
+
             public void run() {
 
                 try {
-                    probabilidadAlertasSitiosEst(kContainer);
-                    probabilidadRestaurantes(kContainer);
-                    probabilidadFotocopiadoras( kContainer);
+                    if(Calculador.horaConsulta(0)>=2.8512e+7 && Calculador.horaConsulta(0)<=7.02e+8)
+                    {
+                        System.out.println("Inicio Retroalimentación");
+                        probabilidadAlertasSitiosEst(kContainer);
+                        probabilidadRestaurantes(kContainer);
+                        probabilidadFotocopiadoras( kContainer);
+                    }
+                    else
+                    {
+                        System.out.println("hora consulta"+(double)Calculador.horaConsulta(0));
+                        System.out.println("Hora de no retroalimentación");
+                    }
+
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+
+            public void resume()
+            {
+
             }
             public void probabilidadAlertasSitiosEst(KieContainer kContainer) throws InterruptedException {
 
@@ -291,10 +320,21 @@ public class Retroalimentacion {
             }
         };
 
-        // Aquí se pone en marcha el timer cada segundo.
-        Timer timer = new Timer();
-        // Dentro de 0 milisegundos avísame cada 1000 milisegundos
-        timer.schedule(timerTask,10,30000);
+        if(actividadTimer)
+        {
+            timer.cancel();
+            timer.purge();
+            actividadTimer=false;
+            return new Document("retroalimentacion",false);
+        }
+        else
+        {
+            timer.schedule(timerTask,10,30000);
+            actividadTimer=true;
+            return new Document("retroalimentacion",true);
+        }
+
+
     }
 
 

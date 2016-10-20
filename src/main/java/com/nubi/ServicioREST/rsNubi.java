@@ -5,6 +5,7 @@ package com.nubi.ServicioREST;
 
 
 import com.nubi.ModuloAdaptacion.Candidato;
+import com.nubi.ModuloAdaptacion.Retroalimentacion;
 import com.nubi.Utils.Calculador;
 import com.nubi.colecciones.*;
 import com.nubi.controladorServicios.ServiciosNUBI;
@@ -24,6 +25,7 @@ import java.util.List;
 @Path("/nubi")
 public class rsNubi {
     private ServiciosNUBI servicios;
+    private static Retroalimentacion ret= new Retroalimentacion();
     @GET
     @Path("/filtrado-sitiosestudio")
     @Produces("application/json")
@@ -430,9 +432,9 @@ public class rsNubi {
     @GET
     @Path("/retroalimentacion")
     @Produces("application/json")
-    public void retroalimentacion() {
-        servicios = new ServiciosNUBIImp();
-        servicios.activarRetroalimentacion();
+    public Document retroalimentacion(@QueryParam("estado") boolean estado) {
+
+        return ret.recalcularDisponibilidad(estado);
 
     }
 }

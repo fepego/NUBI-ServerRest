@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created by Felipe on 18/08/2016.
  */
@@ -32,11 +34,14 @@ public class test {
              KieServices ks = KieServices.Factory.get();
              KieContainer kContainer = ks.getKieClasspathContainer();
             // FiltradoFotocopiadora.EjecutarReglasFotocopiadora("pipe");
-            Retroalimentacion.recalcularDisponibilidad();
+            Retroalimentacion ret= new Retroalimentacion();
+            ret.recalcularDisponibilidad(false);
+
+            //Retroalimentacion.recalcularDisponibilidad();
             //Mapzen.balanceador(4.6468780,-74.0639307,4.62648608014277,-74.0638060122728);
-            Grupo verif= new Grupo();
-            MatchGrupos match= new MatchGrupos();
-            match.generarMatch("Grupo de Calculo");
+            //Grupo verif= new Grupo();
+            //MatchGrupos match= new MatchGrupos();
+            //match.generarMatch("Grupo de Calculo");
              //KieSession kSession = kContainer.newKieSession("ksession-rules");
 //
 //            buscarRestaurantes();

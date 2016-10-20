@@ -234,6 +234,6 @@ public interface ServiciosNUBI {
     /**
      * Metodo para activar el mecanismo de retroalimentaciòn en NUBI desde REST
      */
-    public void activarRetroalimentacion();
+    public Document activarRetroalimentacion(boolean estado);
 
 }
