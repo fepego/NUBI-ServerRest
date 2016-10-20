@@ -211,4 +211,10 @@ public interface ModeloNubi {
      * @param historial
      */
     public void agregarHistorialFotocopiadora(HistorialFotocopiadoras historial);
+
+    /**
+     * Método para obtener todos los usuarios de NUBI
+     * @return
+     */
+    public List<Usuario> ObtenerTodoslosUsuarios();
 }
