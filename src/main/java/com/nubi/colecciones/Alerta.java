@@ -25,54 +25,76 @@ public class Alerta {
     private Restaurante restaurante;
     @Reference
     private Fotocopiadora fotocopiadora;
+    private String usuario;
+    private int like;
+    private int dislike;
 
     public Alerta() {
-
+        like=0;
+        dislike=0;
     }
 
-    public Alerta(Date fechaPublicacion, long horaPublicacion, String estado, SitiosEstudio sitioEst) {
+    public Alerta(Date fechaPublicacion, long horaPublicacion, String estado, SitiosEstudio sitioEst, String usuario) {
         this.fechaPublicacion = fechaPublicacion;
         this.horaPublicacion = horaPublicacion;
         this.estado = estado;
         this.sitioEst = sitioEst;
+        this.usuario = usuario;
+        like=0;
+        dislike=0;
     }
 
-    public Alerta(Date fechaPublicacion, long horaPublicacion, String estado, Restaurante restaurante) {
+    public Alerta(Date fechaPublicacion, long horaPublicacion, String estado, Restaurante restaurante, String usuario) {
         this.fechaPublicacion = fechaPublicacion;
         this.horaPublicacion = horaPublicacion;
         this.estado = estado;
         this.restaurante = restaurante;
+        this.usuario = usuario;
+        like=0;
+        dislike=0;
     }
 
-    public Alerta(Date fechaPublicacion, long horaPublicacion, String estado, Fotocopiadora fotocopiadora) {
+    public Alerta(Date fechaPublicacion, long horaPublicacion, String estado, Fotocopiadora fotocopiadora, String usuario) {
         this.fechaPublicacion = fechaPublicacion;
         this.horaPublicacion = horaPublicacion;
         this.estado = estado;
         this.fotocopiadora = fotocopiadora;
+        this.usuario = usuario;
+        like=0;
+        dislike=0;
     }
 
-    public Alerta(Date fechaPublicacion, long horaPublicacion, String estado, String comentario, SitiosEstudio sitioEst) {
+    public Alerta(Date fechaPublicacion, long horaPublicacion, String estado, String comentario, SitiosEstudio sitioEst, String usuario) {
         this.fechaPublicacion = fechaPublicacion;
         this.horaPublicacion = horaPublicacion;
         this.estado = estado;
         this.comentario = comentario;
         this.sitioEst = sitioEst;
+        this.usuario = usuario;
+        like=0;
+        dislike=0;
     }
 
-    public Alerta(Date fechaPublicacion, long horaPublicacion, String estado, String comentario, Restaurante restaurante) {
+    public Alerta(Date fechaPublicacion, long horaPublicacion, String estado, String comentario, Restaurante restaurante, String usuario) {
         this.fechaPublicacion = fechaPublicacion;
         this.horaPublicacion = horaPublicacion;
         this.estado = estado;
         this.comentario = comentario;
         this.restaurante = restaurante;
+        this.usuario = usuario;
+        like=0;
+        dislike=0;
     }
 
-    public Alerta(Date fechaPublicacion, long horaPublicacion, String estado, String comentario, Fotocopiadora fotocopiadora) {
+    public Alerta(Date fechaPublicacion, long horaPublicacion, String estado, String comentario, Fotocopiadora fotocopiadora, String usuario) {
         this.fechaPublicacion = fechaPublicacion;
         this.horaPublicacion = horaPublicacion;
         this.estado = estado;
         this.comentario = comentario;
         this.fotocopiadora = fotocopiadora;
+        this.usuario = usuario;
+        like=0;
+        dislike=0;
     }
 
     public String getId() {
@@ -139,15 +161,44 @@ public class Alerta {
         this.fotocopiadora = fotocopiadora;
     }
 
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
+    }
+
+    public int getDislike() {
+        return dislike;
+    }
+
+    public void setDislike(int dislike) {
+        this.dislike = dislike;
+    }
+
     @Override
     public String toString() {
         return "Alerta{" +
-                "horaPublicacion=" + horaPublicacion +
+                "id='" + id + '\'' +
+                ", fechaPublicacion=" + fechaPublicacion +
+                ", horaPublicacion=" + horaPublicacion +
                 ", estado='" + estado + '\'' +
                 ", comentario='" + comentario + '\'' +
                 ", sitioEst=" + sitioEst +
                 ", restaurante=" + restaurante +
                 ", fotocopiadora=" + fotocopiadora +
+                ", usuario='" + usuario + '\'' +
+                ", like=" + like +
+                ", dislike=" + dislike +
                 '}';
     }
 }
