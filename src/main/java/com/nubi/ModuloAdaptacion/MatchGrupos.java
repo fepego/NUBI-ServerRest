@@ -28,7 +28,27 @@ public class MatchGrupos {
         this.grupo = grupo;
         modelo= new ModeloNubiImp();
     }
-
+    public void crearPreferencias()
+    {
+        double mediaDist=0,totalAten=0, totalToleranciaDist=0;
+        List<Usuario> integrantes= modelo.obtenerIntegrantes(grupo.getGrupo().getIdUsuario());
+        if(integrantes!=null && integrantes.size()>0)
+        {
+            for (int i=0;i<integrantes.size();i++)
+            {
+                mediaDist+=integrantes.get(i).getPreferencias().getDistancia();
+                totalAten+=integrantes.get(i).getPreferencias().getTiempoMaximo();
+                totalToleranciaDist+=integrantes.get(i).getPreferencias().getToleranciaDist();
+            }
+            mediaDist=mediaDist/integrantes.size();
+            totalAten=totalAten/integrantes.size();
+            totalToleranciaDist=totalToleranciaDist/integrantes.size();
+            Preferencia pref= new Preferencia(0,totalAten,new String("Medio"),mediaDist,0,true,
+                    totalToleranciaDist,new String("Alto"),new String("Cualquiera"),new String("Punto de Atención"));
+            modelo.agregarPreferencias(grupo.getGrupo().getIdUsuario(),pref);
+            modelo.agregarRestricciones(grupo.getGrupo().getIdUsuario(),new Restriccion());
+        }
+    }
     public void generarMatch(String nombre)
     {
         ks = KieServices.Factory.get();

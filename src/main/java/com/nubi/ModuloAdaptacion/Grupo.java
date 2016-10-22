@@ -18,7 +18,11 @@ public class Grupo {
     public Grupo() {
     }
 
-    public Grupo( Usuario grupo, Usuario Integrante) {
+    public Grupo(Usuario grupo) {
+        this.grupo = grupo;
+    }
+
+    public Grupo(Usuario grupo, Usuario Integrante) {
 
         this.grupo = grupo;
         integrante= Integrante;

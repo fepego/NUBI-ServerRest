@@ -217,7 +217,7 @@ public class ServiciosNUBIImp implements ServiciosNUBI {
      * @param estado
      * @return
      */
-    public Document insertarAlertaSitioEstudio(String sitio,String comentario, String estado)
+    public Document insertarAlertaSitioEstudio(String sitio,String comentario, String estado, String usuario)
     {
 
         if(estado!=null || estado.equalsIgnoreCase("Libre") || estado.equalsIgnoreCase("Medio") || estado.equalsIgnoreCase("LLeno"))
@@ -225,7 +225,7 @@ public class ServiciosNUBIImp implements ServiciosNUBI {
 
             SitiosEstudio st= new SitiosEstudio();
             st.setNombre(sitio);
-            Alerta alterta= new Alerta(new Date(), Calculador.horaConsulta(0),estado,comentario,st);
+            Alerta alterta= new Alerta(new Date(), Calculador.horaConsulta(0),estado,comentario,st,usuario);
             mod.agregarAlerta(alterta);
             return new Document("confirmacion",true);
 
@@ -240,14 +240,14 @@ public class ServiciosNUBIImp implements ServiciosNUBI {
      * @param estado
      * @return
      */
-    public Document insertarAlertaRestaurante(String sitio,String comentario, String estado)
+    public Document insertarAlertaRestaurante(String sitio,String comentario, String estado,String usuario)
     {
         if(estado!=null || estado.equalsIgnoreCase("Libre") || estado.equalsIgnoreCase("Medio") || estado.equalsIgnoreCase("LLeno"))
         {
 
             Restaurante restaurante= new Restaurante();
             restaurante.setNombre(sitio);
-            Alerta alterta= new Alerta(new Date(), Calculador.horaConsulta(0),estado,comentario,restaurante);
+            Alerta alterta= new Alerta(new Date(), Calculador.horaConsulta(0),estado,comentario,restaurante,usuario);
             mod.agregarAlerta(alterta);
             return new Document("confirmacion",true);
 
@@ -262,14 +262,14 @@ public class ServiciosNUBIImp implements ServiciosNUBI {
      * @param estado
      * @return
      */
-    public Document insertarAlertaFotocopiadora(String sitio,String comentario, String estado)
+    public Document insertarAlertaFotocopiadora(String sitio,String comentario, String estado, String usuario)
     {
         if(estado!=null || estado.equalsIgnoreCase("Libre") || estado.equalsIgnoreCase("Medio") || estado.equalsIgnoreCase("LLeno"))
         {
 
             Fotocopiadora fotocopiadora=  new Fotocopiadora();
             fotocopiadora.setNombre(sitio);
-            Alerta alterta= new Alerta(new Date(), Calculador.horaConsulta(0),estado,comentario,fotocopiadora);
+            Alerta alterta= new Alerta(new Date(), Calculador.horaConsulta(0),estado,comentario,fotocopiadora,usuario);
             mod.agregarAlerta(alterta);
             return new Document("confirmacion",true);
 
@@ -403,15 +403,15 @@ public class ServiciosNUBIImp implements ServiciosNUBI {
      * @param estado
      * @return
      */
-    public Document agregarAlerta(String sitio,String comentario, String estado)
+    public Document agregarAlerta(String sitio,String comentario, String estado, String usuario)
     {
         Document tipoLugar= mod.obtenerSitio(sitio);
         if(tipoLugar.get("tipoServicio").toString().equalsIgnoreCase("sitioEstudio"))
-            return insertarAlertaSitioEstudio(sitio,comentario,estado);
+            return insertarAlertaSitioEstudio(sitio,comentario,estado,usuario);
         if(tipoLugar.get("tipoServicio").toString().equalsIgnoreCase("restaurantes"))
-            return insertarAlertaRestaurante(sitio,comentario,estado);
+            return insertarAlertaRestaurante(sitio,comentario,estado,usuario);
         if(tipoLugar.get("tipoServicio").toString().equalsIgnoreCase("fotocopiadoras"))
-            return insertarAlertaFotocopiadora(sitio,comentario,estado);
+            return insertarAlertaFotocopiadora(sitio,comentario,estado,usuario);
         return new Document("confirmacion",false);
     }
 
@@ -521,8 +521,9 @@ public class ServiciosNUBIImp implements ServiciosNUBI {
             Notificacion notif= new Notificacion("Grupo",grupo,usuario,"Ahora perteneces al grupo: "+grupo);
             mod.agregarNotificacion(notif);
             mod.actualizarListaContactosGrupo(grupo,usuario);
-            //MatchGrupos match= new MatchGrupos();
-            //match.generarMatch(grupo);
+            MatchGrupos match= new MatchGrupos(new Grupo(mod.obtenerInfoGrupo(grupo)));
+            match.crearPreferencias();
+            match.generarMatch(grupo);
         }
     }
 
@@ -553,5 +554,13 @@ public class ServiciosNUBIImp implements ServiciosNUBI {
     {
         Retroalimentacion mecanismoRet= new Retroalimentacion();
         return mecanismoRet.recalcularDisponibilidad(estado);
+    }
+    /**
+     * {@inheritDoc}
+     * @return
+     */
+    public List<Usuario> ObtenerUsuarios()
+    {
+        return mod.ObtenerTodoslosUsuarios();
     }
 }

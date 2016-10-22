@@ -8,6 +8,7 @@ public class probabilidades {
     private double probLibre;
     private double probMedia;
     private double probLLeno;
+    private double probFinal;
 
     public probabilidades() {
     }
@@ -49,5 +50,24 @@ public class probabilidades {
 
     public void setProbLLeno(double probLLeno) {
         this.probLLeno = probLLeno;
+    }
+
+    public double getProbFinal() {
+        return probFinal;
+    }
+
+    public void setProbFinal(double probFinal) {
+        this.probFinal = probFinal;
+    }
+
+    @Override
+    public String toString() {
+        return "probabilidades{" +
+                "nombreSitio='" + nombreSitio + '\'' +
+                ", probLibre=" + probLibre +
+                ", probMedia=" + probMedia +
+                ", probLLeno=" + probLLeno +
+                ", probFinal=" + probFinal +
+                '}';
     }
 }

@@ -53,6 +53,7 @@ public class Preferencia {
         this.servicioFotocopias = servicioFotocopias;
     }
 
+
     public double getTiempoMinimo() {
         return tiempoMinimo;
     }

@@ -88,21 +88,21 @@ public interface ServiciosNUBI {
      * @param estado
      * @return
      */
-    public Document insertarAlertaSitioEstudio(String sitio,String comentario, String estado);
+    public Document insertarAlertaSitioEstudio(String sitio,String comentario, String estado, String usuario);
     /**
      * Método para agregar un comentario de restaurante
      * @param comentario
      * @param estado
      * @return
      */
-    public Document insertarAlertaRestaurante(String sitio,String comentario, String estado);
+    public Document insertarAlertaRestaurante(String sitio,String comentario, String estado, String usuario);
     /**
      * Método para agregar un comentario de Fotocopiadora
      * @param comentario
      * @param estado
      * @return
      */
-    public Document insertarAlertaFotocopiadora(String sitio,String comentario, String estado);
+    public Document insertarAlertaFotocopiadora(String sitio,String comentario, String estado, String usuario);
 
     /**
      * Metodo que retorna la disponibilidad del sitio dado el nombre
@@ -172,7 +172,7 @@ public interface ServiciosNUBI {
      * @param estado
      * @return
      */
-    public Document agregarAlerta(String sitio,String comentario, String estado);
+    public Document agregarAlerta(String sitio,String comentario, String estado, String usuario);
 
     /**
      * Metodo para retornar lista de contactos de usuario o grupo
@@ -236,4 +236,9 @@ public interface ServiciosNUBI {
      */
     public Document activarRetroalimentacion(boolean estado);
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
+    public List<Usuario> ObtenerUsuarios();
 }

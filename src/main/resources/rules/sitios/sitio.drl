@@ -87,6 +87,20 @@ rule "Tolerancia Ruido Alto"
         c.setPuntaje(c.getPuntaje()+1);
         System.out.println("se agregó 1 por tolerancia ruido Alto");
 end
+rule "Preferencia de Espacios Abierto"
+    when
+        c:Candidato(c.sitio.tipoEspacio=="Abierto" && c.usuario.preferencias.tipoEspacio=="Abierto" || c.usuario.preferencias.tipoEspacio=="Cualquiera")
+    then
+        System.out.println("asigna punto por espacio abierto");
+        c.setPuntaje(c.getPuntaje()+1);
+end
+rule "Preferencia de Espacios Cerrado"
+    when
+        c:Candidato(c.sitio.tipoEspacio=="Cerrado" && c.usuario.preferencias.tipoEspacio=="Cerrado" || c.usuario.preferencias.tipoEspacio=="Cualquiera")
+    then
+        System.out.println("asigna punto por espacio Cerrado");
+        c.setPuntaje(c.getPuntaje()+1);
+end
 rule "Sitio de estudio Favorito"
     when
         c: Candidato(favorito==true)

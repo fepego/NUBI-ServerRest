@@ -26,6 +26,8 @@ public class SitiosEstudio {
     @Embedded
     private List<Semilla> semilla;
     private boolean accesoCondicion;
+    private String tipoEspacio;
+
 
 
     public SitiosEstudio() {
@@ -52,6 +54,16 @@ public class SitiosEstudio {
         this.accesoCondicion = accesoCondicion;
     }
 
+    public SitiosEstudio(String nombre, Localizacion localizacion, Estado estado, String toleranciaRuido, List<Comentario> comentarios, List<Semilla> semilla, boolean accesoCondicion, String tipoEspacio) {
+        this.nombre = nombre;
+        this.localizacion = localizacion;
+        this.estado = estado;
+        this.toleranciaRuido = toleranciaRuido;
+        this.comentarios = comentarios;
+        this.semilla = semilla;
+        this.accesoCondicion = accesoCondicion;
+        this.tipoEspacio = tipoEspacio;
+    }
 
     public String getNombre() {
         return nombre;
@@ -109,6 +121,14 @@ public class SitiosEstudio {
         this.accesoCondicion = accesoCondicion;
     }
 
+    public String getTipoEspacio() {
+        return tipoEspacio;
+    }
+
+    public void setTipoEspacio(String tipoEspacio) {
+        this.tipoEspacio = tipoEspacio;
+    }
+
     @Override
     public String toString() {
         return "SitiosEstudio{" +
@@ -119,6 +139,7 @@ public class SitiosEstudio {
                 ", comentarios=" + comentarios +
                 ", semilla=" + semilla +
                 ", accesoCondicion=" + accesoCondicion +
+                ", tipoEspacio='" + tipoEspacio + '\'' +
                 '}';
     }
 }

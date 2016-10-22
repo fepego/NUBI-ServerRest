@@ -112,17 +112,28 @@ public class Retroalimentacion {
                         semMed=s.getSemilla().get(0).getProbMedia();
                         semAlt=s.getSemilla().get(0).getProbAlta();
                         System.out.println("semillas: "+semLib+" "+semMed+" "+semAlt);
-                        //Calculo bayes dado: la probabilidad de que este en algun estado (libre, medio, lleno) dada la probabilidad
-                        // de alertas y semilla
-                        problibre=(probaltLib*semLib)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
-                        probMedia=(probaltMed*semMed)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
-                        probLleno=(probaltLlen*semAlt)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                        if(totalAlertasLibres==0 && totalAlertasMedia==0 && totalalertasLleno==0)
+                        {
+                            problibre=semLib;
+                            probMedia=semMed;
+                            probLleno=semAlt;
+                        }
+                        else
+                        {
+                            //Calculo bayes dado: la probabilidad de que este en algun estado (libre, medio, lleno) dada la probabilidad
+                            // de alertas y semilla
+                            problibre=(probaltLib*semLib)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                            probMedia=(probaltMed*semMed)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                            probLleno=(probaltLlen*semAlt)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                        }
+
                         System.out.println("rprobabilidades semilla y alt: "+problibre+ " "+probMedia+" "+probLleno);
                         if(resHist==null)
                         {
                             probabilidades prob= new probabilidades(s.getNombre(),problibre,probMedia,probLleno);
                             StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
                             kSession.execute(prob);
+                            mod.actualizarSitioEstudio(s.getNombre(),prob.getProbFinal());
                         }
                         else
                         {
@@ -130,19 +141,29 @@ public class Retroalimentacion {
                             resultadoHistorico aux=resHist.next();
                             totalHist= (int) (aux.getTotalAlertasLibre()+aux.getTotalAlertasMedio()+aux.getTotalAlertasLibre());
                             System.out.println("total hist"+totalHist);
-                            probHistLibre=aux.getTotalAlertasLibre()/totalHist;
-                            probHistMedio=aux.getTotalAlertasMedio()/totalHist;
-                            probHistLleno=aux.getTotalAlertasLLeno()/totalHist;
-                            System.out.println("prob historico"+ probHistLibre+" "+probHistMedio+" "+probHistLleno);
-                            //calculo bayes de cualquier estado dadas la prob de (semilla/alertas) e historico
-                            probFinLibre=(problibre*probHistLibre)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
-                            probFinmedia=(probMedia*probHistMedio)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
-                            probFinLleno=(probLleno*probHistLleno)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
-                            System.out.println("probabilidades sem/alt e hist "+probFinLibre+" "+probFinmedia+" "+probFinLleno);
-                            probabilidades prob= new probabilidades(s.getNombre(),probFinLibre,probFinmedia,probFinLleno);
-                            StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
-                            kSession.execute(prob);
-
+                            if(aux.getTotalAlertasLibre()==0 && aux.getTotalAlertasMedio()==0 && aux.getTotalAlertasLLeno()==0)
+                            {
+                                probabilidades prob= new probabilidades(s.getNombre(),problibre,probMedia,probLleno);
+                                StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
+                                kSession.execute(prob);
+                                mod.actualizarSitioEstudio(s.getNombre(),prob.getProbFinal());
+                            }
+                            else
+                            {
+                                probHistLibre=aux.getTotalAlertasLibre()/totalHist;
+                                probHistMedio=aux.getTotalAlertasMedio()/totalHist;
+                                probHistLleno=aux.getTotalAlertasLLeno()/totalHist;
+                                System.out.println("prob historico"+ probHistLibre+" "+probHistMedio+" "+probHistLleno);
+                                //calculo bayes de cualquier estado dadas la prob de (semilla/alertas) e historico
+                                probFinLibre=(problibre*probHistLibre)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                                probFinmedia=(probMedia*probHistMedio)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                                probFinLleno=(probLleno*probHistLleno)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                                System.out.println("probabilidades sem/alt e hist "+probFinLibre+" "+probFinmedia+" "+probFinLleno);
+                                probabilidades prob= new probabilidades(s.getNombre(),probFinLibre,probFinmedia,probFinLleno);
+                                StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
+                                kSession.execute(prob);
+                                mod.actualizarSitioEstudio(s.getNombre(),prob.getProbFinal());
+                            }
                         }
                         HistorialSitios historico= new HistorialSitios(Calculador.horaConsulta(0),
                                 Calculador.diaString(new Date().getDay()),totalAlertasLibres,totalAlertasMedia,totalalertasLleno,s);
@@ -193,17 +214,27 @@ public class Retroalimentacion {
                         semMed=restaurante.getSemilla().get(0).getProbMedia();
                         semAlt=restaurante.getSemilla().get(0).getProbAlta();
                         System.out.println("semillas: "+semLib+" "+semMed+" "+semAlt);
-                        //Calculo bayes dado: la probabilidad de que este en algun estado (libre, medio, lleno) dada la probabilidad
-                        // de alertas y semilla
-                        problibre=(probaltLib*semLib)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
-                        probMedia=(probaltMed*semMed)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
-                        probLleno=(probaltLlen*semAlt)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                        if(totalAlertasLibres==0 && totalAlertasMedia==0 && totalalertasLleno==0)
+                        {
+                            problibre=semLib;
+                            probMedia=semMed;
+                            probLleno=semAlt;
+                        }
+                        else
+                        {
+                            //Calculo bayes dado: la probabilidad de que este en algun estado (libre, medio, lleno) dada la probabilidad
+                            // de alertas y semilla
+                            problibre=(probaltLib*semLib)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                            probMedia=(probaltMed*semMed)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                            probLleno=(probaltLlen*semAlt)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                        }
                         System.out.println("rprobabilidades semilla y alt: "+problibre+ " "+probMedia+" "+probLleno);
                         if(resHist==null)
                         {
                             probabilidades prob= new probabilidades(restaurante.getNombre(),problibre,probMedia,probLleno);
                             StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
                             kSession.execute(prob);
+                            mod.actualizarRestaurante(restaurante.getNombre(),prob.getProbFinal());
                         }
                         else
                         {
@@ -213,19 +244,29 @@ public class Retroalimentacion {
 
                             totalHist= (int) (aux.getTotalAlertasLibre()+aux.getTotalAlertasMedio()+aux.getTotalAlertasLibre());
                             System.out.println("total hist"+totalHist);
-                            probHistLibre=aux.getTotalAlertasLibre()/totalHist;
-                            probHistMedio=aux.getTotalAlertasMedio()/totalHist;
-                            probHistLleno=aux.getTotalAlertasLLeno()/totalHist;
-                            System.out.println("prob historico"+ probHistLibre+" "+probHistMedio+" "+probHistLleno);
-                            //calculo bayes de cualquier estado dadas la prob de (semilla/alertas) e historico
-                            probFinLibre=(problibre*probHistLibre)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
-                            probFinmedia=(probMedia*probHistMedio)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
-                            probFinLleno=(probLleno*probHistLleno)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
-                            System.out.println("probabilidades sem/alt e hist "+probFinLibre+" "+probFinmedia+" "+probFinLleno);
-                            probabilidades prob= new probabilidades(restaurante.getNombre(),probFinLibre,probFinmedia,probFinLleno);
-                            StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
-                            kSession.execute(prob);
-
+                            if(totalHist==0)
+                            {
+                                probabilidades prob= new probabilidades(restaurante.getNombre(),problibre,probMedia,probLleno);
+                                StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
+                                kSession.execute(prob);
+                                mod.actualizarRestaurante(restaurante.getNombre(),prob.getProbFinal());
+                            }
+                            else
+                            {
+                                probHistLibre=aux.getTotalAlertasLibre()/totalHist;
+                                probHistMedio=aux.getTotalAlertasMedio()/totalHist;
+                                probHistLleno=aux.getTotalAlertasLLeno()/totalHist;
+                                System.out.println("prob historico"+ probHistLibre+" "+probHistMedio+" "+probHistLleno);
+                                //calculo bayes de cualquier estado dadas la prob de (semilla/alertas) e historico
+                                probFinLibre=(problibre*probHistLibre)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                                probFinmedia=(probMedia*probHistMedio)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                                probFinLleno=(probLleno*probHistLleno)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                                System.out.println("probabilidades sem/alt e hist "+probFinLibre+" "+probFinmedia+" "+probFinLleno);
+                                probabilidades prob= new probabilidades(restaurante.getNombre(),probFinLibre,probFinmedia,probFinLleno);
+                                StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
+                                kSession.execute(prob);
+                                mod.actualizarRestaurante(restaurante.getNombre(),prob.getProbFinal());
+                            }
                         }
                         HistorialRestaurantes historico= new HistorialRestaurantes(Calculador.horaConsulta(0),
                                 Calculador.diaString(new Date().getDay()),totalAlertasLibres,totalAlertasMedia,totalalertasLleno,restaurante);
@@ -277,17 +318,27 @@ public class Retroalimentacion {
                         semMed=fotocopiadora.getSemilla().get(0).getProbMedia();
                         semAlt=fotocopiadora.getSemilla().get(0).getProbAlta();
                         System.out.println("semillas: "+semLib+" "+semMed+" "+semAlt);
-                        //Calculo bayes dado: la probabilidad de que este en algun estado (libre, medio, lleno) dada la probabilidad
-                        // de alertas y semilla
-                        problibre=(probaltLib*semLib)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
-                        probMedia=(probaltMed*semMed)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
-                        probLleno=(probaltLlen*semAlt)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                        if(totalAlertasLibres==0 && totalAlertasMedia==0 && totalalertasLleno==0)
+                        {
+                            problibre=semLib;
+                            probMedia=semMed;
+                            probLleno=semAlt;
+                        }
+                        else
+                        {
+                            //Calculo bayes dado: la probabilidad de que este en algun estado (libre, medio, lleno) dada la probabilidad
+                            // de alertas y semilla
+                            problibre=(probaltLib*semLib)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                            probMedia=(probaltMed*semMed)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                            probLleno=(probaltLlen*semAlt)/((probaltLib*semLib)+(probaltMed*semMed)+(probaltLlen*semAlt));
+                        }
                         System.out.println("rprobabilidades semilla y alt: "+problibre+ " "+probMedia+" "+probLleno);
                         if(resHist==null)
                         {
                             probabilidades prob= new probabilidades(fotocopiadora.getNombre(),problibre,probMedia,probLleno);
                             StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
                             kSession.execute(prob);
+                            mod.actualizarFotocopiadoras(fotocopiadora.getNombre(),prob.getProbFinal());
                         }
                         else
                         {
@@ -297,18 +348,29 @@ public class Retroalimentacion {
 
                             totalHist= (int) (aux.getTotalAlertasLibre()+aux.getTotalAlertasMedio()+aux.getTotalAlertasLibre());
                             System.out.println("total hist"+totalHist);
-                            probHistLibre=aux.getTotalAlertasLibre()/totalHist;
-                            probHistMedio=aux.getTotalAlertasMedio()/totalHist;
-                            probHistLleno=aux.getTotalAlertasLLeno()/totalHist;
-                            System.out.println("prob historico"+ probHistLibre+" "+probHistMedio+" "+probHistLleno);
-                            //calculo bayes de cualquier estado dadas la prob de (semilla/alertas) e historico
-                            probFinLibre=(problibre*probHistLibre)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
-                            probFinmedia=(probMedia*probHistMedio)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
-                            probFinLleno=(probLleno*probHistLleno)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
-                            System.out.println("probabilidades sem/alt e hist "+probFinLibre+" "+probFinmedia+" "+probFinLleno);
-                            probabilidades prob= new probabilidades(fotocopiadora.getNombre(),probFinLibre,probFinmedia,probFinLleno);
-                            StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
-                            kSession.execute(prob);
+                            if(totalHist==0)
+                            {
+                                probabilidades prob= new probabilidades(fotocopiadora.getNombre(),problibre,probMedia,probLleno);
+                                StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
+                                kSession.execute(prob);
+                                mod.actualizarFotocopiadoras(fotocopiadora.getNombre(),prob.getProbFinal());
+                            }
+                            else
+                            {
+                                probHistLibre=aux.getTotalAlertasLibre()/totalHist;
+                                probHistMedio=aux.getTotalAlertasMedio()/totalHist;
+                                probHistLleno=aux.getTotalAlertasLLeno()/totalHist;
+                                System.out.println("prob historico"+ probHistLibre+" "+probHistMedio+" "+probHistLleno);
+                                //calculo bayes de cualquier estado dadas la prob de (semilla/alertas) e historico
+                                probFinLibre=(problibre*probHistLibre)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                                probFinmedia=(probMedia*probHistMedio)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                                probFinLleno=(probLleno*probHistLleno)/((problibre*probHistLibre)+(probMedia*probHistMedio)+(probLleno*probHistLleno));
+                                System.out.println("probabilidades sem/alt e hist "+probFinLibre+" "+probFinmedia+" "+probFinLleno);
+                                probabilidades prob= new probabilidades(fotocopiadora.getNombre(),probFinLibre,probFinmedia,probFinLleno);
+                                StatelessKieSession kSession= kContainer.newStatelessKieSession("EstadoSitio");
+                                kSession.execute(prob);
+                                mod.actualizarFotocopiadoras(fotocopiadora.getNombre(),prob.getProbFinal());
+                            }
 
                         }
                         HistorialFotocopiadoras historico= new HistorialFotocopiadoras(Calculador.horaConsulta(0),
@@ -329,14 +391,9 @@ public class Retroalimentacion {
         }
         else
         {
-            timer.schedule(timerTask,10,30000);
+            timer.schedule(timerTask,10,1800000);
             actividadTimer=true;
             return new Document("retroalimentacion",true);
         }
-
-
     }
-
-
-
 }

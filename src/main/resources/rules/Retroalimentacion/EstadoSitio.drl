@@ -7,17 +7,20 @@ rule "Regla de probabilidad de disponibilidad  sitio libre"
         p: probabilidades( probLibre> probMedia && probLibre>probLLeno)
     then
         System.out.println("el sitio esta libre segun probabilidad");
+        p.setProbFinal(0.1);
 end
 rule "Regla de probabilidad de disponibilidad sitio Media"
     when
         p: probabilidades( probMedia> probLibre && probMedia>probLLeno)
     then
         System.out.println("el sitio esta Medio segun probabilidad");
+        p.setProbFinal(0.5);
 end
 rule "Regla de probabilidad de disponibilidad sitio LLeno"
     when
         p: probabilidades( probLLeno> probLibre && probLLeno>probMedia)
     then
         System.out.println("el sitio esta LLeno segun probabilidad");
+        p.setProbFinal(0.9);
 end
 

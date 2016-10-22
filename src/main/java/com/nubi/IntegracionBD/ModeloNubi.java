@@ -25,6 +25,8 @@ public interface ModeloNubi {
     public Iterator <resultadoHistorico> getHistoricoRestaurantes(String id);
     public Iterator <resultadoHistorico> getHistoricoFotocopiadora(String id);
     public void actualizarSitioEstudio(String nombreSitio, double disponibilidad);
+    public void actualizarRestaurante(String nombreSitio, double disponibilidad);
+    public void actualizarFotocopiadoras(String nombreSitio, double disponibilidad);
     public void InsertarRuta(Ruta ruta);
     public Iterator <Ruta> buscarRuta(double latInicio, double longInicio, double latDestino, double longDestino);
     public  List<SitiosEstudio> buscarSitioEstudio();
@@ -217,4 +219,11 @@ public interface ModeloNubi {
      * @return
      */
     public List<Usuario> ObtenerTodoslosUsuarios();
+
+    /**
+     * Metodo para agregar puntos a usuario
+     * @param usuario
+     * @param puntos
+     */
+    public Document  sumarPuntosUsuario(String usuario, int puntos);
 }

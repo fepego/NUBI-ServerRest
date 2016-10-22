@@ -203,9 +203,9 @@ public class rsNubi {
     @GET
     @Path("/agregar-alerta")
     @Produces("application/json")
-    public Document agregarAlerta(@QueryParam("sitio")String sitio,@QueryParam("comentario")String comentario,@QueryParam("estado")String estado ) {
+    public Document agregarAlerta(@QueryParam("sitio")String sitio,@QueryParam("comentario")String comentario,@QueryParam("estado")String estado, @QueryParam("usuario") String usuario ) {
         servicios = new ServiciosNUBIImp();
-        return servicios.agregarAlerta(sitio,comentario,estado);
+        return servicios.agregarAlerta(sitio,comentario,estado,usuario);
     }
 
     @GET
@@ -435,6 +435,14 @@ public class rsNubi {
     public Document retroalimentacion(@QueryParam("estado") boolean estado) {
 
         return ret.recalcularDisponibilidad(estado);
+
+    }
+    @GET
+    @Path("/get-allusuarios")
+    @Produces("application/json")
+    public List <Usuario> ObtenerUsuarios() {
+        servicios = new ServiciosNUBIImp();
+        return servicios.ObtenerUsuarios();
 
     }
 }

@@ -15,6 +15,7 @@ import org.mongodb.morphia.query.UpdateOperations;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
+import java.nio.channels.UnresolvedAddressException;
 import java.util.*;
 
 import static org.mongodb.morphia.aggregation.Group.grouping;
@@ -244,6 +245,7 @@ public class ModeloNubiImp implements ModeloNubi {
                 .match(ds.createQuery(HistorialSitios.class).field("sitiosEstudio").equal(s))
                 .match(ds.createQuery(HistorialSitios.class).field("_id").greaterThanOrEq(horamin))
                 .match(ds.createQuery(HistorialSitios.class).field("_id").lessThanOrEq(horamax))
+                .match(ds.createQuery(HistorialSitios.class).field("dia").equal(Calculador.diaString(new Date().getDay())))
                 .group("sitiosEstudio",
                     grouping("totalAlertasLibre",new Accumulator("$sum","numAlertasLibre")), grouping("totalAlertasMedio",new Accumulator("$sum","numAlertasMedia")),
                         grouping("totalAlertasLLeno",new Accumulator("$sum","numAlertasLleno"))).aggregate(resultadoHistorico.class);
@@ -269,6 +271,7 @@ public class ModeloNubiImp implements ModeloNubi {
                 .match(ds.createQuery(HistorialRestaurantes.class).field("restaurante").equal(restaurante))
                 .match(ds.createQuery(HistorialRestaurantes.class).field("_id").greaterThanOrEq(horamin))
                 .match(ds.createQuery(HistorialRestaurantes.class).field("_id").lessThanOrEq(horamax))
+                .match(ds.createQuery(HistorialRestaurantes.class).field("diaRegistro").equal(Calculador.diaString(new Date().getDay())))
                 .group("restaurante",
                         grouping("totalAlertasLibre",new Accumulator("$sum","numAlertasLibre")), grouping("totalAlertasMedio",new Accumulator("$sum","numAlertasMedia")),
                         grouping("totalAlertasLLeno",new Accumulator("$sum","numAlertasLleno"))).aggregate(resultadoHistorico.class);
@@ -294,6 +297,7 @@ public class ModeloNubiImp implements ModeloNubi {
                 .match(ds.createQuery(HistorialFotocopiadoras.class).field("fotocopiadora").equal(fotocopiadoras))
                 .match(ds.createQuery(HistorialFotocopiadoras.class).field("_id").greaterThanOrEq(horamin))
                 .match(ds.createQuery(HistorialFotocopiadoras.class).field("_id").lessThanOrEq(horamax))
+                .match(ds.createQuery(HistorialFotocopiadoras.class).field("diaRegistro").equal(Calculador.diaString(new Date().getDay())))
                 .group("fotocopiadora",
                         grouping("totalAlertasLibre",new Accumulator("$sum","numAlertasLibre")), grouping("totalAlertasMedio",new Accumulator("$sum","numAlertasMedia")),
                         grouping("totalAlertasLLeno",new Accumulator("$sum","numAlertasLleno"))).aggregate(resultadoHistorico.class);
@@ -310,6 +314,24 @@ public class ModeloNubiImp implements ModeloNubi {
         {
             sitiosEstudio.get(0).getEstado().setDisponibilidad(disponibilidad);
             ds.save(sitiosEstudio.get(0));
+        }
+    }
+    public void actualizarRestaurante(String nombreSitio, double disponibilidad)
+    {
+        List <Restaurante> restaurantes= ds.createQuery(Restaurante.class).field("_id").contains(nombreSitio).asList();
+        if(restaurantes != null)
+        {
+            restaurantes.get(0).getEstado().setDisponibilidad(disponibilidad);
+            ds.save(restaurantes.get(0));
+        }
+    }
+    public void actualizarFotocopiadoras(String nombreSitio, double disponibilidad)
+    {
+        List <Fotocopiadora> fotocopiadoras= ds.createQuery(Fotocopiadora.class).field("_id").contains(nombreSitio).asList();
+        if(fotocopiadoras != null)
+        {
+            fotocopiadoras.get(0).getEstado().setDisponibilidad(disponibilidad);
+            ds.save(fotocopiadoras.get(0));
         }
     }
     public void InsertarRuta(Ruta ruta)
@@ -489,32 +511,50 @@ public class ModeloNubiImp implements ModeloNubi {
     {
         ObjectId oid=new ObjectId(id);
         Alerta alertas=ds.find(Alerta.class).field("_id").equal(oid).get();
+        Alerta aux= alertas;
         System.out.println("entro"+alertas.toString());
-        if(tipo && alertas!=null)
+        if(alertas!=null)
         {
-            System.out.println("entro");
-            if(alertas.getSitioEst()!=null)
+            if(tipo)
             {
-                Alerta alt=new Alerta(new Date(),Calculador.horaConsulta(0),alertas.getEstado(),alertas.getSitioEst());
-                agregarAlerta(alt);
+                UpdateOperations <Alerta> ops= ds.createUpdateOperations(Alerta.class).inc("like",1);
+                ds.update(ds.find(Alerta.class).field("_id").equal(oid),ops);
+                aux.setLike(aux.getLike()+1);
             }
-            if(alertas.getFotocopiadora()!=null)
+            else
             {
-                Alerta alt=new Alerta(new Date(),Calculador.horaConsulta(0),alertas.getEstado(),alertas.getFotocopiadora());
-                agregarAlerta(alt);
+                UpdateOperations <Alerta> ops= ds.createUpdateOperations(Alerta.class).inc("dislike",1);
+                ds.update(ds.find(Alerta.class).field("_id").equal(oid),ops);
+                aux.setDislike(aux.getDislike()+1);
             }
-            if(alertas.getRestaurante()!=null)
+            if(aux.getLike()<aux.getDislike())
             {
-                Alerta alt=new Alerta(new Date(),Calculador.horaConsulta(0),alertas.getEstado(),alertas.getRestaurante());
-                agregarAlerta(alt);
+                sumarPuntosUsuario(alertas.getUsuario(),1);
+                ds.delete(ds.createQuery(Alerta.class).filter("_id",oid));
             }
-        }
-        if(tipo==false  && alertas!=null)
-        {
-            ds.delete(ds.createQuery(Alerta.class).filter("_id",oid));
+            else
+            {
+                sumarPuntosUsuario(alertas.getUsuario(),2);
+            }
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param usuario
+     * @param puntos
+     */
+    public Document sumarPuntosUsuario(String usuario, int puntos)
+    {
+        Usuario usu= buscarUsuario(usuario);
+        if(usu!=null)
+        {
+            UpdateOperations <Usuario> ops= ds.createUpdateOperations(Usuario.class).inc("puntaje",puntos);
+            ds.update(usu,ops);
+            return new Document("confirmacion", true);
+        }
+        return new Document("confirmacion", false);
+    }
     /**
      * {@inheritDoc}
      * @param usuario
@@ -928,4 +968,15 @@ public class ModeloNubiImp implements ModeloNubi {
             ds.save(historial);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     * @return
+     */
+    public List<Usuario> ObtenerTodoslosUsuarios()
+    {
+        return ds.createQuery(Usuario.class).asList();
+    }
+
+
 }
