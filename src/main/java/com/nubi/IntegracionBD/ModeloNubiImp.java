@@ -978,5 +978,8 @@ public class ModeloNubiImp implements ModeloNubi {
         return ds.createQuery(Usuario.class).asList();
     }
 
-
+    public void limpiarColeccionAlertas()
+    {
+        ds.delete(ds.createQuery(Alerta.class));
+    }
 }

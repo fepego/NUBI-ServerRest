@@ -36,7 +36,7 @@ public class test {
             // FiltradoFotocopiadora.EjecutarReglasFotocopiadora("pipe");
             Retroalimentacion ret= new Retroalimentacion();
             ret.recalcularDisponibilidad(false);
-
+            mod.limpiarColeccionAlertas();
             //Retroalimentacion.recalcularDisponibilidad();
             //Mapzen.balanceador(4.6468780,-74.0639307,4.62648608014277,-74.0638060122728);
             //Grupo verif= new Grupo();

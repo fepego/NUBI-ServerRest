@@ -226,4 +226,9 @@ public interface ModeloNubi {
      * @param puntos
      */
     public Document  sumarPuntosUsuario(String usuario, int puntos);
+
+    /**
+     * Método para limpiar las alertas de la colección en BD
+     */
+    public void limpiarColeccionAlertas();
 }
