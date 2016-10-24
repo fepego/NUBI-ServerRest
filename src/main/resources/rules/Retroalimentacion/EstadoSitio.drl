@@ -23,4 +23,18 @@ rule "Regla de probabilidad de disponibilidad sitio LLeno"
         System.out.println("el sitio esta LLeno segun probabilidad");
         p.setProbFinal(0.9);
 end
+rule "Valor triangular para disponibilidades cercanas"
+    when
+        p: probabilidades(p.probLibre==0.4 && p.probMedia==0.4)
+    then
+        System.out.println("Probabilidades 0.4 para medio y libre");
+        p.setProbFinal(0.5);
+end
+rule "Valor triangular para disponibilidades cercanas medio lleno"
+    when
+        p: probabilidades(p.probLLeno==0.4 && p.probMedia==0.4)
+    then
+        System.out.println("Probabilidades 0.4 para medio y LLeno");
+        p.setProbFinal(0.7);
+end
 
