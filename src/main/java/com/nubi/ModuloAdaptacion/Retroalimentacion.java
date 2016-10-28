@@ -60,7 +60,7 @@ public class Retroalimentacion {
                         System.out.println("hora consulta"+(double)Calculador.horaConsulta(0));
                         System.out.println("Hora de no retroalimentación");
                         if(Calculador.horaConsulta(0)>7.236e+7 && Calculador.horaConsulta(0)<7.56e+7 )
-                            mod.limpiarColeccionAlertas();
+                            mod.generarHistoricoAlertas();
                     }
 
 

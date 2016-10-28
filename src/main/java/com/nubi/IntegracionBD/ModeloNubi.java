@@ -231,4 +231,9 @@ public interface ModeloNubi {
      * Método para limpiar las alertas de la colección en BD
      */
     public void limpiarColeccionAlertas();
+
+    /**
+     * Metodo para guardar toda la información de las alertas en una colección alterna
+     */
+    public void generarHistoricoAlertas();
 }

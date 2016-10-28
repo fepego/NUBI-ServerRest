@@ -982,4 +982,21 @@ public class ModeloNubiImp implements ModeloNubi {
     {
         ds.delete(ds.createQuery(Alerta.class));
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void generarHistoricoAlertas()
+    {
+        List<Alerta> alertas=ds.createQuery(Alerta.class).asList();
+        if(alertas.size()>0 && alertas!=null)
+        {
+            for(Alerta a: alertas)
+            {
+                HistoricoAlertas histAlertas= new HistoricoAlertas(a);
+                ds.save(histAlertas);
+            }
+            limpiarColeccionAlertas();
+        }
+    }
 }
