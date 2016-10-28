@@ -34,13 +34,13 @@ public class test {
              KieServices ks = KieServices.Factory.get();
              KieContainer kContainer = ks.getKieClasspathContainer();
             // FiltradoFotocopiadora.EjecutarReglasFotocopiadora("pipe");
-//            Retroalimentacion ret= new Retroalimentacion();
-//            ret.recalcularDisponibilidad(false);
+//
 //            mod.limpiarColeccionAlertas();
             SitiosEstudio sitio=(SitiosEstudio)mod.obtenerSitio("Ing 4 piso").get("sitio");
             mod.agregarAlerta(new Alerta(new Date(),Calculador.horaConsulta(0),"Libre",sitio,"pena-carlos"));
-            mod.generarHistoricoAlertas();
-            //Retroalimentacion.recalcularDisponibilidad();
+            //mod.generarHistoricoAlertas();
+            Retroalimentacion ret= new Retroalimentacion();
+            ret.recalcularDisponibilidad(false);
             //Mapzen.balanceador(4.6468780,-74.0639307,4.62648608014277,-74.0638060122728);
             //Grupo verif= new Grupo();
             //MatchGrupos match= new MatchGrupos();

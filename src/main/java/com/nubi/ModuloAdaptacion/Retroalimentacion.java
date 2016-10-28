@@ -47,9 +47,12 @@ public class Retroalimentacion {
             public void run() {
 
                 try {
-                    if(Calculador.horaConsulta(0)>=2.8512e+7 && Calculador.horaConsulta(0)<=7.02e+8 && new Date().getDay()!=0)
+                    System.out.println(Calculador.horaConsulta(0));
+                    if((Calculador.horaConsulta(0)>=28840000 && Calculador.horaConsulta(0)<=70230000) && new Date().getDay()!=0)
                     {
                         System.out.println("Inicio Retroalimentación");
+                        System.out.println(new Date());
+                        System.out.println(Calculador.horaConsulta(0));
                         probabilidadAlertasSitiosEst(kContainer);
                         probabilidadRestaurantes(kContainer);
                         probabilidadFotocopiadoras( kContainer);
@@ -59,7 +62,7 @@ public class Retroalimentacion {
                         ModeloNubi mod= new ModeloNubiImp();
                         System.out.println("hora consulta"+(double)Calculador.horaConsulta(0));
                         System.out.println("Hora de no retroalimentación");
-                        if(Calculador.horaConsulta(0)>7.236e+7 && Calculador.horaConsulta(0)<7.56e+7 )
+                        if(Calculador.horaConsulta(0)>73876000 && Calculador.horaConsulta(0)<81020000 )
                             mod.generarHistoricoAlertas();
                     }
 
