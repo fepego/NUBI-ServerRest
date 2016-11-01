@@ -999,4 +999,17 @@ public class ModeloNubiImp implements ModeloNubi {
             limpiarColeccionAlertas();
         }
     }
+
+    /**
+     * {@inheritDoc}
+     * @param restaurante
+     */
+    public void agregarRestaurante(Restaurante restaurante)
+    {
+        if(restaurante!=null)
+        {
+            ds.save(restaurante);
+        }
+    }
+
 }

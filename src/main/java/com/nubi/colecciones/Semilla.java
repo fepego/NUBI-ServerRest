@@ -22,6 +22,20 @@ public class Semilla {
     public Semilla() {
     }
 
+    public Semilla(String dia, String tipoDia) {
+        this.dia = dia;
+        this.tipoDia=tipoDia;
+    }
+    public Semilla(Semilla sem)
+    {
+        this.horaInicio = sem.getHoraInicio();
+        this.horaFin = sem.getHoraFin();
+        this.probLibre = sem.getProbLibre();
+        this.probMedia = sem.getProbMedia();
+        this.probAlta = sem.getProbAlta();
+        this.tipoDia = sem.getTipoDia();
+        this.dia = sem.getDia();
+    }
     public Semilla(long horaInicio, long horaFin, double probLibre,
                    double probMedia, double probAlta, String tipoDia, String dia) {
         this.horaInicio = horaInicio;

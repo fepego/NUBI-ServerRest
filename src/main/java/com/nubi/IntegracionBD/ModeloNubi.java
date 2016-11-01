@@ -236,4 +236,11 @@ public interface ModeloNubi {
      * Metodo para guardar toda la información de las alertas en una colección alterna
      */
     public void generarHistoricoAlertas();
+
+    /**
+     * Método para agregar un restaurante a la BD
+     * @param restaurante
+     */
+    public void agregarRestaurante(Restaurante restaurante);
+
 }
